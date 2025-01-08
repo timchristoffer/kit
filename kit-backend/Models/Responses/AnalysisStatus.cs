@@ -1,14 +1,20 @@
-public class AnalysisStatus : BaseEntity
-{
-    public Guid AnalysisId { get; set; }
-    public AnalysisStatusEnum Status { get; set; } // Enum används istället för string
-}
+using System;
+using System.ComponentModel.DataAnnotations;
 
-// AnalysisStatusEnum.cs
-public enum AnalysisStatusEnum
+namespace KitBackend.Models.Responses
 {
-    Pending,
-    InProgress,
-    Completed,
-    Failed
+    public class AnalysisStatus : BaseEntity
+    {
+        [Key]
+        public Guid AnalysisId { get; set; }
+        public AnalysisStatusEnum Status { get; set; }
+    }
+    public enum AnalysisStatusEnum
+    {
+        Pending,
+        InProgress,
+        Completed,
+        Failed
+
+    }
 }

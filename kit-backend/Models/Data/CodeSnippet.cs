@@ -1,5 +1,12 @@
-public class CodeSnippet : BaseEntity
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace KitBackend.Models.Data
 {
-    public Guid SnippetId { get; set; } // Unikt ID för varje kodblock
-    public string Code { get; set; } = string.Empty; // Själva koden
+    public class CodeSnippet : BaseEntity
+    {
+        [Key]
+        public Guid SnippetId { get; set; } = Guid.NewGuid();
+        public string Code { get; set; } = string.Empty;
+    }
 }
