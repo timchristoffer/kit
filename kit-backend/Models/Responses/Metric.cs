@@ -1,7 +1,14 @@
-public class Metric : BaseEntity
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace KitBackend.Models.Responses
 {
-    public Guid MetricId { get; set; }
-    public Guid AnalysisId { get; set; }
-    public string MetricName { get; set; } = string.Empty; // e.g., "Code Lines", "Warnings", "Errors"
-    public int Value { get; set; }
+    public class Metric : BaseEntity
+    {
+        [Key]
+        public Guid MetricId { get; set; }
+        public Guid AnalysisId { get; set; }
+        public string MetricName { get; set; } = string.Empty;
+        public int Value { get; set; }
+    }
 }

@@ -1,5 +1,11 @@
-public abstract class BaseEntity
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace KitBackend.Models
 {
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
+    public abstract class BaseEntity
+    {
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
 }

@@ -1,6 +1,15 @@
-public class AnalysisRequest : BaseEntity
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace KitBackend.Models.Requests
 {
-    public Guid RequestId { get; set; } // Unikt ID för varje förfrågan
-    public string SourceType { get; set; } = string.Empty; // "File" eller "Snippet"
-    public string Content { get; set; } = string.Empty; // Kod eller filinnehåll i textformat
+    public class AnalysisRequest
+    {
+        [Key]
+        public Guid RequestId { get; set; }
+        public string? SourceType { get; set; }
+        public string? Content { get; set; } 
+        public int? FileId { get; set; }
+    }
+
 }
