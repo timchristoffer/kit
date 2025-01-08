@@ -7,3 +7,12 @@ obj/
 *.userosscache
 *.suo
 *.sln.docstates
+
+# Ignore node_modules
+node_modules/
+
+# Ignore node_modules in Tooling folder
+Tooling/node_modules/
+
+# Keep package.json in Tooling folder
+!Tooling/package.json
