@@ -33,7 +33,7 @@ namespace KitBackend.Services
                 analysisStatus.Status = AnalysisStatusEnum.InProgress;
                 await UpdateAnalysisStatusAsync(analysisStatus);
 
-                // Generera analys
+                // Generate analysis
                 List<string> issues = RoslynAnalyzer.Analyze(code);
 
                 if (code.Contains("import") || code.Contains("export"))
@@ -46,10 +46,11 @@ namespace KitBackend.Services
                 var performanceIssues = PerformPerformanceAnalysis(code);
                 var readabilityIssues = AnalyzeReadability(code);
 
-                // Beräkna poäng för varje kategori
+                // Calculate scores for each category
                 int readabilityScore = CalculateReadabilityScore(code);
                 int securityScore = CalculateSecurityScore(code);
                 int performanceScore = CalculatePerformanceScore(code);
+                int complexityScore = CalculateComplexityScore(code);
 
                 var report = new AnalysisReport
                 {
@@ -61,7 +62,7 @@ namespace KitBackend.Services
                     ReadabilityScore = readabilityScore,
                     SecurityScore = securityScore,
                     PerformanceScore = performanceScore,
-                    ComplexityScore = CalculateComplexityScore(code),
+                    ComplexityScore = complexityScore,
                     BestPracticesFeedback = "Ensure your code follows best practices and optimal performance guidelines."
                 };
 
@@ -82,45 +83,82 @@ namespace KitBackend.Services
             }
         }
 
-        // Läsbarhet (Readability) Score
+        // Readability Score
         private int CalculateReadabilityScore(string code)
         {
             int score = 100;
             if (code.Split('\n').Length > 500) score -= 20;
             if (code.Contains("switch") && code.Contains("case")) score -= 10;
-            if (code.Length > 1000) score -= 15; // Om koden är för lång
-            // Additional readability checks
+            if (code.Length > 1000) score -= 15; // If the code is too long
             if (code.Contains("todo")) score -= 5; // Check for TODO comments
             if (code.Contains("fixme")) score -= 5; // Check for FIXME comments
+            if (code.Split('\n').Any(line => line.Length > 120)) score -= 10; // Check for long lines
+            if (code.Count(c => c == '{') > 20) score -= 10; // Check for deeply nested structures
+            if (!code.Contains("//")) score -= 10; // Check for lack of comments
+            if (code.Contains("var ")) score -= 5; // Check for usage of var instead of explicit types
+            if (code.Contains("magic number")) score -= 5; // Check for magic numbers
+            if (!code.Contains("PascalCase") || !code.Contains("camelCase")) score -= 5; // Check for naming conventions
+            if (code.Contains("if") && !code.Contains("else")) score -= 5; // Check for unmatched if statements
+            if (code.Split(new string[] { "public", "private", "protected" }, StringSplitOptions.None).Any(func => func.Length > 1000)) score -= 10; // Check for long functions
 
             return Math.Max(0, score);
         }
 
-        // Säkerhet (Security) Score
+        // Security Score
         private int CalculateSecurityScore(string code)
         {
             int score = 100;
             if (code.Contains("SELECT * FROM")) score -= 20;
             if (code.Contains("<script>") || code.Contains("document.write")) score -= 25;
             if (code.Contains("HttpClient") && code.Contains(".GetAsync")) score -= 15;
-            // Additional security checks
             if (code.Contains("eval")) score -= 30; // Avoid eval function, which can lead to code injection
             if (code.Contains("Thread.Sleep")) score -= 20; // Potential DoS attack
+            if (code.Contains("password")) score -= 30; // Check for hardcoded passwords
+            if (code.Contains("private") && code.Contains("string") && code.Contains("=")) score -= 20; // Check for hardcoded sensitive data
+            if (code.Contains("MD5") || code.Contains("SHA1")) score -= 20; // Check for insecure cryptographic practices
+            if (code.Contains("catch") && !code.Contains("throw")) score -= 10; // Check for improper error handling
 
             return Math.Max(0, score);
         }
 
-        // Prestanda (Performance) Score
+        // Performance Score
         private int CalculatePerformanceScore(string code)
         {
             int score = 100;
             if (code.Contains("Thread.Sleep")) score -= 20;
             if (code.Contains("lock")) score -= 15;
             if (code.Contains(".GetAsync") && !code.Contains("await")) score -= 25;
-            // Additional performance checks
             if (code.Contains("foreach") && code.Contains("List") && code.Contains("ToList")) score -= 10; // Avoid unnecessary ToList conversion
+            if (code.Contains("new") && code.Contains("List") && code.Contains("Capacity")) score -= 10; // Check for excessive memory allocation
+            if (code.Contains("for") && code.Contains("Count")) score -= 10; // Check for inefficient loops
+            if (code.Contains("new") && code.Contains("object")) score -= 10; // Check for unnecessary object creation
+            if (code.Contains("Dictionary") && code.Contains("new string")) score -= 15; // Check for excessive memory usage in dictionaries
+            if (code.Contains("for") && code.Contains("for")) score -= 15; // Check for nested loops
+            if (code.Contains("Console.WriteLine") && code.Contains("for")) score -= 10; // Check for excessive console output in loops
+            if (code.Contains("List") && code.Contains("Add")) score -= 10; // Check for excessive list additions
+            if (code.Contains("Dictionary") && code.Contains("Add")) score -= 10; // Check for excessive dictionary additions
 
             return Math.Max(0, score);
+        }
+
+        // Complexity Score
+        private int CalculateComplexityScore(string code)
+        {
+            int score = 100;
+            int cyclomaticComplexity = CalculateCyclomaticComplexity(code);
+            if (cyclomaticComplexity > 10) score -= 20; // High cyclomatic complexity
+            if (code.Split(new string[] { "public", "private", "protected" }, StringSplitOptions.None).Length > 20) score -= 10; // Too many functions
+            if (code.Contains("class") && code.Contains(":")) score -= 10; // Deep inheritance
+
+            return Math.Max(0, score);
+        }
+
+        private int CalculateCyclomaticComplexity(string code)
+        {
+            // Placeholder for cyclomatic complexity calculation
+            int complexity = 1;
+            complexity += code.Split(new string[] { "if", "else", "case", "for", "while", "&&", "||" }, StringSplitOptions.None).Length - 1;
+            return complexity;
         }
 
         private List<string> PerformSecurityAnalysis(string code)
@@ -142,7 +180,6 @@ namespace KitBackend.Services
                 issues.Add("Potential insecure HTTP call detected: Use HTTPS and ensure proper validation.");
             }
 
-            // Additional security vulnerabilities
             if (code.Contains("eval"))
             {
                 issues.Add("Potential risk of code injection detected: Avoid using eval to execute code.");
@@ -151,6 +188,26 @@ namespace KitBackend.Services
             if (code.Contains("Thread.Sleep"))
             {
                 issues.Add("Potential denial of service (DoS) attack: Avoid using Thread.Sleep, consider using async/await.");
+            }
+
+            if (code.Contains("password"))
+            {
+                issues.Add("Security risk: Hardcoded password detected. Avoid hardcoding passwords in the code.");
+            }
+
+            if (code.Contains("private") && code.Contains("string") && code.Contains("="))
+            {
+                issues.Add("Security risk: Hardcoded sensitive data detected. Avoid hardcoding sensitive data in the code.");
+            }
+
+            if (code.Contains("MD5") || code.Contains("SHA1"))
+            {
+                issues.Add("Security risk: Insecure cryptographic practice detected. Avoid using MD5 or SHA1.");
+            }
+
+            if (code.Contains("catch") && !code.Contains("throw"))
+            {
+                issues.Add("Security risk: Improper error handling detected. Ensure exceptions are properly handled.");
             }
 
             return issues;
@@ -170,10 +227,39 @@ namespace KitBackend.Services
                 issues.Add("Performance warning: Ensure locks are scoped appropriately to avoid deadlocks.");
             }
 
-            // Additional performance issues
             if (code.Contains("foreach") && code.Contains("List") && code.Contains("ToList"))
             {
                 issues.Add("Performance issue: Avoid unnecessary ToList conversions when iterating over a collection.");
+            }
+
+            if (code.Contains("new") && code.Contains("List") && code.Contains("Capacity"))
+            {
+                issues.Add("Potential performance issue: Avoid excessive memory allocation by specifying an appropriate capacity for lists.");
+            }
+
+            if (code.Contains("for") && code.Contains("Count"))
+            {
+                issues.Add("Performance issue: Avoid inefficient loops by caching the count value.");
+            }
+
+            if (code.Contains("new") && code.Contains("object"))
+            {
+                issues.Add("Performance issue: Avoid unnecessary object creation.");
+            }
+
+            if (code.Contains("Dictionary") && code.Contains("new string"))
+            {
+                issues.Add("Performance issue: Excessive memory usage in dictionaries detected. Consider optimizing memory usage.");
+            }
+
+            if (code.Contains("for") && code.Contains("for"))
+            {
+                issues.Add("Performance issue: Nested loops detected. Consider optimizing the loop structure.");
+            }
+
+            if (code.Contains("Console.WriteLine") && code.Contains("for"))
+            {
+                issues.Add("Performance issue: Excessive console output in loops detected. Consider reducing console output.");
             }
 
             return issues;
@@ -207,10 +293,39 @@ namespace KitBackend.Services
                 }
             }
 
-            // Additional readability issues
             if (code.Contains("todo"))
             {
                 issues.Add("Code readability: TODO comments found, ensure they are addressed before finalizing.");
+            }
+
+            if (code.Split('\n').Any(line => line.Length > 120))
+            {
+                issues.Add("Code readability: Long lines detected. Consider breaking them into shorter lines.");
+            }
+
+            if (code.Count(c => c == '{') > 20)
+            {
+                issues.Add("Code readability: Deeply nested structures detected. Consider refactoring to improve readability.");
+            }
+
+            if (!code.Contains("//"))
+            {
+                issues.Add("Code readability: Lack of comments detected. Consider adding comments to improve readability.");
+            }
+
+            if (code.Contains("var "))
+            {
+                issues.Add("Code readability: Usage of var detected. Consider using explicit types for better readability.");
+            }
+
+            if (code.Contains("magic number"))
+            {
+                issues.Add("Code readability: Magic numbers detected. Consider defining constants for better readability.");
+            }
+
+            if (!code.Contains("PascalCase") || !code.Contains("camelCase"))
+            {
+                issues.Add("Code readability: Inconsistent naming conventions detected. Ensure consistent use of PascalCase and camelCase.");
             }
 
             return issues;
@@ -219,11 +334,6 @@ namespace KitBackend.Services
         private List<string> ParseESLintOutput(string eslintOutput)
         {
             return eslintOutput.Split('\n').Where(line => line.Contains("error")).ToList();
-        }
-
-        private int CalculateComplexityScore(string code)
-        {
-            return code.Length % 10; // A placeholder for complexity scoring, can be extended for more accurate analysis
         }
 
         public async Task<AnalysisReport> GetReportByIdAsync(Guid id)

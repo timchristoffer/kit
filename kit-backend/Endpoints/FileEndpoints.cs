@@ -82,8 +82,15 @@ namespace KitBackend.Endpoints
                 {
                     Console.WriteLine($"File found: {file.FileName}, Size: {file.FileContent.Length} bytes");
 
-                    var mimeType = GetMimeType(file.FileName);
-                    return Results.File(file.FileContent, mimeType, file.FileName);
+                    return Results.Ok(new
+                    {
+                        Id = file.Id,
+                        FileName = file.FileName,
+                        FileSize = file.FileSize,
+                        UploadDate = file.UploadDate,
+                        Uploader = file.Uploader,
+                        Content = Convert.ToBase64String(file.FileContent) // Return file content as base64 string
+                    });
                 }
 
                 Console.WriteLine("File not found.");
