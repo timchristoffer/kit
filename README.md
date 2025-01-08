@@ -23,14 +23,17 @@ A simple app to keep your code tidy by reviewing it and generating reports.
 
 
 ## Overview
-Provide a brief description of what the project is about, its goals, and key features.
 
+This project is a web application built using **Next.js** for the frontend and a **C# .NET backend** for code analysis. The application allows users to paste or write code in a text area and receive a detailed analysis report. The backend analyzes the code based on multiple aspects, including readability, security, and performance, and returns the results to the frontend.
 
-- Example: This project is a code review tool that allows users to upload code files or paste code directly for analysis. It generates a comprehensive report and outputs it as a downloadable PDF.
+## **Usage**
+1. The user pastes their code into the text field and clicks "Analyze."
+2. The backend process starts and analyzes the code.
+3. The results are displayed as a report in the frontend, providing the user with insights into what can be improved in their code.
 
+This project showcases how to combine frontend and backend technologies to build a functional and user-friendly application that solves a real-world problem.
 
 ---
-
 
 ## Installation
 
@@ -60,7 +63,7 @@ dotnet run
 The project uses the following technologies:
  * **Frontend:** Next.js, React
  * **Backend:** C#, .NET Core WebAPI, .NET 9
- * **Database:** SQL Server
+ * **Database:** PostgreSQL (pgAdmin4)
  * **Authentication:** OAuth 2.0 (GitHub, Google, Microsoft)
  * **API Specification:** Swagger/OpenAPI
  * **Testing:** Jest (frontend), xUnit (backend)
@@ -71,13 +74,13 @@ The project uses the following technologies:
 
 #### File Upload
  * Users can upload code files for analysis.
-    * Supported file types: ``.js``, ``.cs``, ``.py``, etc.
+    * Supported file types: ``.js``, ``.ts``, ``.cs``, etc.
      
 #### Code Analysis
  * The uploaded file undergoes analysis based on the language.
     * **Javascript:** ESLint for code quality checks.
     * **C#:** Roslyn for preformance and security analysis.
-    * **Python:** PyLint for identifying potential issues.
+    * **KIT Custom Analytics Tool:** KIT CAT for overall analysis.
      
 #### PDF Report Generation
  * After analysis, users can download a PDF report with:
