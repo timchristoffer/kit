@@ -34,11 +34,11 @@ namespace KitBackend.Endpoints
                     return Results.BadRequest("File is required. Please upload a valid file.");
                 }
 
-                var allowedExtensions = new[] { ".cs", ".js", ".py" };
+                var allowedExtensions = new[] { ".cs", ".js", ".jsx", ".ts", ".tsx", ".py" };
                 var fileExtension = Path.GetExtension(file.FileName).ToLower();
                 if (!allowedExtensions.Contains(fileExtension))
                 {
-                    return Results.BadRequest("Invalid file type. Allowed types are .cs, .js, .py.");
+                    return Results.BadRequest("Invalid file type. Allowed types are .cs, .js, .jsx, .ts, .tsx, .py.");
                 }
 
                 // Assume you get "uploader" from authentication (e.g., User.Identity.Name)
@@ -103,6 +103,9 @@ namespace KitBackend.Endpoints
         {
             return fileName.EndsWith(".cs") ? "text/plain" :
                    fileName.EndsWith(".js") ? "application/javascript" :
+                   fileName.EndsWith(".jsx") ? "application/javascript" :
+                   fileName.EndsWith(".ts") ? "application/typescript" :
+                   fileName.EndsWith(".tsx") ? "application/typescript" :
                    fileName.EndsWith(".py") ? "text/x-python" :
                    "application/octet-stream";
         }

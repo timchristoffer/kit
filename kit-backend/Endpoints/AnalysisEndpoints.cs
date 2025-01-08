@@ -16,6 +16,7 @@ namespace KitBackend.Endpoints
                .WithName("AnalyzeCode")
                .Produces<AnalysisReport>(StatusCodes.Status200OK)
                .Produces(StatusCodes.Status400BadRequest)
+               .Produces(StatusCodes.Status500InternalServerError)
                .WithTags("Analysis");
 
             app.MapGet("/api/analysis/{id:guid}", GetAnalysisReport)
@@ -50,7 +51,7 @@ namespace KitBackend.Endpoints
                     return Results.BadRequest("No code provided.");
                 }
 
-                // Analysera koden och få tillbaka rapporten
+                // Perform code analysis
                 var analysisReport = await analysisService.GenerateReportAsync(codeToAnalyze);
 
                 return Results.Ok(analysisReport);
@@ -63,8 +64,15 @@ namespace KitBackend.Endpoints
 
         public static async Task<IResult> GetAnalysisReport(Guid id, IAnalysisService analysisService)
         {
-            var report = await analysisService.GetReportByIdAsync(id);
-            return report != null ? Results.Ok(report) : Results.NotFound();
+            try
+            {
+                var report = await analysisService.GetReportByIdAsync(id);
+                return report != null ? Results.Ok(report) : Results.NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: $"Failed to retrieve analysis report: {ex.Message}", statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

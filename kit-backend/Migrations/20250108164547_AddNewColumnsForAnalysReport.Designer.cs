@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace kit_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250108164547_AddNewColumnsForAnalysReport")]
+    partial class AddNewColumnsForAnalysReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,22 +49,13 @@ namespace kit_backend.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<int>("PerformanceScore")
-                        .HasColumnType("integer");
-
                     b.PrimitiveCollection<List<string>>("ReadabilityIssues")
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<int>("ReadabilityScore")
-                        .HasColumnType("integer");
-
                     b.PrimitiveCollection<List<string>>("SecurityIssues")
                         .IsRequired()
                         .HasColumnType("text[]");
-
-                    b.Property<int>("SecurityScore")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
