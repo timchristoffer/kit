@@ -7,21 +7,32 @@ export default function FeedbackButton() {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const openFeedbackModal = () => setIsFeedbackModalOpen(true);
   const closeFeedbackModal = () => setIsFeedbackModalOpen(false);
 
   const sendFeedback = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSending(true);
 
-    emailjs.send('service_jjkkdwj', 'template_beyff15', { feedback }, 'NGlmTxVLYkLiN_Dx4')
+    const templateParams = {
+      to_name: 'Recipient Name', // Replace with the actual recipient name if needed
+      from_name: 'Your Name', // Replace with the actual sender name if needed
+      message: feedback,
+    };
+
+    emailjs.send('service_jjkkdwj', 'template_beyff15', templateParams, 'NGlmTxVLYkLiN_Dx4')
       .then((result) => {
         console.log(result.text);
         setIsFeedbackSent(true);
+        setFeedback(''); // Clear the input field
+        setIsSending(false);
         closeFeedbackModal();
         setTimeout(() => setIsFeedbackSent(false), 3000); // Hide the message after 3 seconds
       }, (error) => {
         console.log(error.text);
+        setIsSending(false);
       });
   };
 
@@ -29,7 +40,7 @@ export default function FeedbackButton() {
     <>
       <button
         onClick={openFeedbackModal}
-        className="fixed top-4 left-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        className="fixed top-4 left-4 px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
       >
         Feedback
       </button>
@@ -52,9 +63,10 @@ export default function FeedbackButton() {
               />
               <button
                 type="submit"
-                className="mt-4 w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
+                className={`mt-4 w-full py-2 px-4 rounded-md focus:outline-none ${isSending || feedback.trim() === '' ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                disabled={isSending || feedback.trim() === ''}
               >
-                Send Feedback
+                {isSending ? 'Sending...' : 'Send Feedback'}
               </button>
             </form>
           </div>
