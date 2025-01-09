@@ -12,6 +12,9 @@ interface AnalysisReportProps {
     securityScore: number;
     performanceScore: number;
     issues: string[];
+    securityIssues: string[];
+    performanceIssues: string[];
+    readabilityIssues: string[];
   };
 }
 
@@ -85,11 +88,54 @@ export default function AnalysisReport({ report }: AnalysisReportProps) {
           )}
         </button>
         {isIssuesVisible && (
-          <ul className="list-disc list-inside mt-2 text-white">
-            {report.issues.map((issue, index) => (
-              <li key={index}>{issue}</li>
-            ))}
-          </ul>
+          <div className="mt-2 text-white">
+            {report.issues.length > 0 && (
+              <div>
+                <h3 className="font-semibold">General Issues:</h3>
+                <ul className="list-disc list-inside">
+                  {report.issues.map((issue, index) => (
+                    <li key={index}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {report.securityIssues.length > 0 && (
+              <div>
+                <h3 className="font-semibold">Security Issues:</h3>
+                <ul className="list-disc list-inside">
+                  {report.securityIssues.map((issue, index) => (
+                    <li key={index}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {report.performanceIssues.length > 0 && (
+              <div>
+                <h3 className="font-semibold">Performance Issues:</h3>
+                <ul className="list-disc list-inside">
+                  {report.performanceIssues.map((issue, index) => (
+                    <li key={index}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {report.readabilityIssues.length > 0 && (
+              <div>
+                <h3 className="font-semibold">Readability Issues:</h3>
+                <ul className="list-disc list-inside">
+                  {report.readabilityIssues.map((issue, index) => (
+                    <li key={index}>{issue}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {report.issues.length === 0 &&
+              report.securityIssues.length === 0 &&
+              report.performanceIssues.length === 0 &&
+              report.readabilityIssues.length === 0 && (
+                <p>No issues found</p>
+              )}
+          </div>
         )}
       </div>
 

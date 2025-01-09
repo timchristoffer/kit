@@ -11,6 +11,9 @@ interface Report {
   securityScore: number;
   performanceScore: number;
   issues: string[];
+  securityIssues: string[];
+  performanceIssues: string[];
+  readabilityIssues: string[];
 }
 
 interface ApiResponse {
@@ -78,7 +81,7 @@ export default function CodeForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Code Analysis</h1>
+      <h1 className="text-2xl font-bold mb-4">Keep It Tidy - KIT</h1>
       <div className={`flex flex-col ${code ? 'md:flex-row' : ''} w-full space-y-4 md:space-y-0 md:space-x-4`}>
         <div className={`flex-1 ${code ? '' : 'mx-auto'}`}>
           <CodeInputForm onSubmit={handleSubmit} loading={loading} submitted={submitted} />
