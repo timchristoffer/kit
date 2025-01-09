@@ -155,9 +155,8 @@ namespace KitBackend.Services
 
         private int CalculateCyclomaticComplexity(string code)
         {
-            // Placeholder for cyclomatic complexity calculation
             int complexity = 1;
-            complexity += code.Split(new string[] { "if", "else", "case", "for", "while", "&&", "||" }, StringSplitOptions.None).Length - 1;
+            complexity += code.Split(new string[] { "if", "else", "case", "for", "while", "&&", "||", "switch", "catch", "?", "do", "goto", "continue", "break", "function", "=>", "try", "finally" }, StringSplitOptions.None).Length - 1;
             return complexity;
         }
 
