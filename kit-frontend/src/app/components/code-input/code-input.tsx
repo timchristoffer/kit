@@ -27,7 +27,7 @@ export default function CodeInputForm({ onSubmit, loading, submitted }: CodeInpu
     <form
       onSubmit={handleSubmit}
       className={`space-y-4 p-2 md:p-4 bg-slate-900 rounded-md max-w-full mx-auto transition-all duration-300 ${
-        submitted ? 'md:max-w-md' : 'md:max-w-2xl'
+        submitted ? 'lg:max-w-md' : 'md:max-w-2xl'
       }`}
     >
       <textarea
