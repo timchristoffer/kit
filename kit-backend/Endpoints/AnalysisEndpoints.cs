@@ -51,7 +51,6 @@ namespace KitBackend.Endpoints
                     return Results.BadRequest("No code provided.");
                 }
 
-                // Perform code analysis
                 var analysisReport = await analysisService.GenerateReportAsync(codeToAnalyze);
 
                 return Results.Ok(analysisReport);

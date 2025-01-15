@@ -4,7 +4,6 @@ public class ESLintAnalyzer
 {
     public static string Analyze(string code)
     {
-        // Skapa en tillfällig fil för ESLint att analysera
         var tempFile = Path.GetTempFileName();
         File.WriteAllText(tempFile, code);
 
@@ -25,7 +24,7 @@ public class ESLintAnalyzer
         string result = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
 
-        File.Delete(tempFile); // Rensa tillfällig fil
+        File.Delete(tempFile);
         return result;
     }
 }

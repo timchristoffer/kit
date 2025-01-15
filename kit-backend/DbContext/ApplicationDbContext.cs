@@ -29,16 +29,12 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Definiera relationer
-
-        // Projekt -> Användare (One-to-Many relation)
         modelBuilder.Entity<Project>()
             .HasOne(p => p.User)
-            .WithMany() // Ingen samling på användaren, så vi använder WithMany()
+            .WithMany()
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // UploadedFile -> Project (Many-to-One relation)
         modelBuilder.Entity<UploadedFile>()
             .HasOne(uf => uf.Project)
             .WithMany(p => p.UploadedFiles)

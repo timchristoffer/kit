@@ -46,7 +46,6 @@ namespace KitBackend.Services
                 var performanceIssues = PerformPerformanceAnalysis(code);
                 var readabilityIssues = AnalyzeReadability(code);
 
-                // Calculate scores for each category
                 int readabilityScore = CalculateReadabilityScore(code);
                 int securityScore = CalculateSecurityScore(code);
                 int performanceScore = CalculatePerformanceScore(code);
@@ -89,16 +88,16 @@ namespace KitBackend.Services
             int score = 100;
             if (code.Split('\n').Length > 500) score -= 20;
             if (code.Contains("switch") && code.Contains("case")) score -= 10;
-            if (code.Length > 1000) score -= 15; // If the code is too long
-            if (code.Contains("todo")) score -= 5; // Check for TODO comments
-            if (code.Contains("fixme")) score -= 5; // Check for FIXME comments
-            if (code.Split('\n').Any(line => line.Length > 120)) score -= 10; // Check for long lines
-            if (code.Count(c => c == '{') > 20) score -= 10; // Check for deeply nested structures
-            if (!code.Contains("//")) score -= 10; // Check for lack of comments
-            if (code.Contains("var ")) score -= 5; // Check for usage of var instead of explicit types
-            if (code.Contains("magic number")) score -= 5; // Check for magic numbers
-            if (!code.Contains("PascalCase") || !code.Contains("camelCase")) score -= 5; // Check for naming conventions
-            if (code.Contains("if") && !code.Contains("else")) score -= 5; // Check for unmatched if statements
+            if (code.Length > 1000) score -= 15; 
+            if (code.Contains("todo")) score -= 5; 
+            if (code.Contains("fixme")) score -= 5; 
+            if (code.Split('\n').Any(line => line.Length > 120)) score -= 10; 
+            if (code.Count(c => c == '{') > 20) score -= 10;
+            if (!code.Contains("//")) score -= 10;
+            if (code.Contains("var ")) score -= 5; 
+            if (code.Contains("magic number")) score -= 5;
+            if (!code.Contains("PascalCase") || !code.Contains("camelCase")) score -= 5;
+            if (code.Contains("if") && !code.Contains("else")) score -= 5; 
             if (code.Split(new string[] { "public", "private", "protected" }, StringSplitOptions.None).Any(func => func.Length > 1000)) score -= 10; // Check for long functions
 
             return Math.Max(0, score);
@@ -111,12 +110,12 @@ namespace KitBackend.Services
             if (code.Contains("SELECT * FROM")) score -= 20;
             if (code.Contains("<script>") || code.Contains("document.write")) score -= 25;
             if (code.Contains("HttpClient") && code.Contains(".GetAsync")) score -= 15;
-            if (code.Contains("eval")) score -= 30; // Avoid eval function, which can lead to code injection
-            if (code.Contains("Thread.Sleep")) score -= 20; // Potential DoS attack
-            if (code.Contains("password")) score -= 30; // Check for hardcoded passwords
-            if (code.Contains("private") && code.Contains("string") && code.Contains("=")) score -= 20; // Check for hardcoded sensitive data
-            if (code.Contains("MD5") || code.Contains("SHA1")) score -= 20; // Check for insecure cryptographic practices
-            if (code.Contains("catch") && !code.Contains("throw")) score -= 10; // Check for improper error handling
+            if (code.Contains("eval")) score -= 30; 
+            if (code.Contains("Thread.Sleep")) score -= 20; 
+            if (code.Contains("password")) score -= 30; 
+            if (code.Contains("private") && code.Contains("string") && code.Contains("=")) score -= 20; 
+            if (code.Contains("MD5") || code.Contains("SHA1")) score -= 20; 
+            if (code.Contains("catch") && !code.Contains("throw")) score -= 10;
 
             return Math.Max(0, score);
         }
@@ -128,15 +127,15 @@ namespace KitBackend.Services
             if (code.Contains("Thread.Sleep")) score -= 20;
             if (code.Contains("lock")) score -= 15;
             if (code.Contains(".GetAsync") && !code.Contains("await")) score -= 25;
-            if (code.Contains("foreach") && code.Contains("List") && code.Contains("ToList")) score -= 10; // Avoid unnecessary ToList conversion
-            if (code.Contains("new") && code.Contains("List") && code.Contains("Capacity")) score -= 10; // Check for excessive memory allocation
-            if (code.Contains("for") && code.Contains("Count")) score -= 10; // Check for inefficient loops
-            if (code.Contains("new") && code.Contains("object")) score -= 10; // Check for unnecessary object creation
-            if (code.Contains("Dictionary") && code.Contains("new string")) score -= 15; // Check for excessive memory usage in dictionaries
-            if (code.Contains("for") && code.Contains("for")) score -= 15; // Check for nested loops
-            if (code.Contains("Console.WriteLine") && code.Contains("for")) score -= 10; // Check for excessive console output in loops
-            if (code.Contains("List") && code.Contains("Add")) score -= 10; // Check for excessive list additions
-            if (code.Contains("Dictionary") && code.Contains("Add")) score -= 10; // Check for excessive dictionary additions
+            if (code.Contains("foreach") && code.Contains("List") && code.Contains("ToList")) score -= 10;
+            if (code.Contains("new") && code.Contains("List") && code.Contains("Capacity")) score -= 10; 
+            if (code.Contains("for") && code.Contains("Count")) score -= 10; 
+            if (code.Contains("new") && code.Contains("object")) score -= 10;
+            if (code.Contains("Dictionary") && code.Contains("new string")) score -= 15; 
+            if (code.Contains("for") && code.Contains("for")) score -= 15; 
+            if (code.Contains("Console.WriteLine") && code.Contains("for")) score -= 10; 
+            if (code.Contains("List") && code.Contains("Add")) score -= 10; 
+            if (code.Contains("Dictionary") && code.Contains("Add")) score -= 10; 
 
             return Math.Max(0, score);
         }
@@ -146,9 +145,9 @@ namespace KitBackend.Services
         {
             int score = 100;
             int cyclomaticComplexity = CalculateCyclomaticComplexity(code);
-            if (cyclomaticComplexity > 10) score -= 20; // High cyclomatic complexity
-            if (code.Split(new string[] { "public", "private", "protected" }, StringSplitOptions.None).Length > 20) score -= 10; // Too many functions
-            if (code.Contains("class") && code.Contains(":")) score -= 10; // Deep inheritance
+            if (cyclomaticComplexity > 10) score -= 20; 
+            if (code.Split(new string[] { "public", "private", "protected" }, StringSplitOptions.None).Length > 20) score -= 10; 
+            if (code.Contains("class") && code.Contains(":")) score -= 10; 
 
             return Math.Max(0, score);
         }

@@ -15,7 +15,7 @@ namespace KitBackend.Services
 
         public async Task<CodeSnippet> CreateCodeSnippetAsync(CodeSnippet snippet)
         {
-            snippet.SnippetId = Guid.NewGuid(); // Generera ett nytt Guid för SnippetId
+            snippet.SnippetId = Guid.NewGuid();
             _context.CodeSnippet.Add(snippet);
             await _context.SaveChangesAsync();
             return snippet;

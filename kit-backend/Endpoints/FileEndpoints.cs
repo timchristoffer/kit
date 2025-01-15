@@ -41,8 +41,8 @@ namespace KitBackend.Endpoints
                     return Results.BadRequest("Invalid file type. Allowed types are .cs, .js, .jsx, .ts, .tsx, .py.");
                 }
 
-                // Assume you get "uploader" from authentication (e.g., User.Identity.Name)
-                string uploader = "uploader"; // Replace with actual source if possible.
+                
+                string uploader = "uploader";
 
                 var uploadedFile = await fileService.UploadFileAsync(file, uploader);
                 if (uploadedFile == null)
