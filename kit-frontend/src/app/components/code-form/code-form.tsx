@@ -4,8 +4,10 @@ import axios from 'axios';
 import CodeInputForm from '../code-input/code-input';
 import AnalysisReport from '../code-analysis/code-analysis';    
 import CodeDisplay from '../code-display/code-display';
+import CodeDownload from '../code-download/code-download';
 
 interface Report {
+  reportId: string; // Lägg till reportId här
   complexityScore: number;
   readabilityScore: number;
   securityScore: number;
@@ -14,6 +16,7 @@ interface Report {
   securityIssues: string[];
   performanceIssues: string[];
   readabilityIssues: string[];
+  explanation: string;
 }
 
 interface ApiResponse {
@@ -96,6 +99,7 @@ export default function CodeForm() {
       {report && (
         <div className="w-full">
           <AnalysisReport report={report} />
+          <CodeDownload reportId={report.reportId} />
         </div>
       )}
     </div>

@@ -15,6 +15,7 @@ interface AnalysisReportProps {
     securityIssues: string[];
     performanceIssues: string[];
     readabilityIssues: string[];
+    // explanation: string; // Lägg till detta fält
   };
 }
 
@@ -64,6 +65,14 @@ export default function AnalysisReport({ report }: AnalysisReportProps) {
     ],
   };
 
+  // const explanationSections = report.explanation.split(';').reduce((acc, item) => {
+  //   const [key, value] = item.split(':').map(str => str.trim());
+  //   if (key && value) {
+  //     acc[key] = value;
+  //   }
+  //   return acc;
+  // }, {} as Record<string, string>);
+
   return (
     <div className="p-4 bg-slate-900 mt-4 rounded-md shadow-md">
       <div className="flex justify-between items-center mb-4">
@@ -88,7 +97,7 @@ export default function AnalysisReport({ report }: AnalysisReportProps) {
           )}
         </button>
         {isIssuesVisible && (
-          <div className="mt-2 text-white">
+          <div className="mt-2 text-white mt-4 p-4 bg-gray-800 rounded-md shadow-md">
             {report.issues.length > 0 && (
               <div>
                 <h3 className="font-semibold">General Issues:</h3>
@@ -155,6 +164,18 @@ export default function AnalysisReport({ report }: AnalysisReportProps) {
           </div>
         </div>
       )}
+      {/* Lägg till detta för att visa Explanation */}
+      {/* {report.explanation && (
+        <div className="mt-4 p-4 bg-gray-800 rounded-md shadow-md">
+          <h3 className="text-lg font-semibold text-white">Explanation:</h3>
+          {Object.entries(explanationSections).map(([key, value]) => (
+            <div key={key} className="mb-2">
+              <h4 className="font-semibold text-white">{key}:</h4>
+              <p className="text-white">{value}</p>
+            </div>
+          ))}
+        </div>
+      )} */}
     </div>
   );
 }
