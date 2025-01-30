@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// L‰gg till loggning
+// L√§gg till loggning
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// L‰gg till tj‰nster till containern.
+// L√§gg till tj√§nster till containern.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -30,17 +30,21 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICodeSnippetService, CodeSnippetService>();
+builder.Services.AddScoped<PdfReportService>();
 
-// L‰gg till autentiseringstj‰nster
+// L√§gg till MLModelService
+builder.Services.AddSingleton<MLModelService>();
+
+// L√§gg till autentiseringstj√§nster
 builder.Services.AddAuthentication();
 
-// L‰gg till auktoriseringstj‰nster
+// L√§gg till auktoriseringstj√§nster
 builder.Services.AddAuthorization();
 
-// L‰gg till antiforgery-tj‰nster
+// L√§gg till antiforgery-tj√§nster
 // builder.Services.AddAntiforgery();
 
-// L‰gg till DbContext med PostgreSQL
+// L√§gg till DbContext med PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -70,4 +74,3 @@ app.MapUserEndpoints();
 app.MapCodeSnippetEndpoints();
 
 app.Run();
-

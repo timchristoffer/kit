@@ -5,6 +5,7 @@ using KitBackend.Models.Requests;
 using KitBackend.Models.Responses;
 using KitBackend.Services;
 using System.Text;
+using System.IO;
 
 namespace KitBackend.Endpoints
 {
@@ -22,6 +23,12 @@ namespace KitBackend.Endpoints
             app.MapGet("/api/analysis/{id:guid}", GetAnalysisReport)
                .WithName("GetAnalysisReport")
                .Produces<AnalysisReport>(StatusCodes.Status200OK)
+               .Produces(StatusCodes.Status404NotFound)
+               .WithTags("Analysis");
+
+            app.MapGet("/api/analysis/download/{id:guid}", DownloadReport)
+               .WithName("DownloadReport")
+               .Produces(StatusCodes.Status200OK)
                .Produces(StatusCodes.Status404NotFound)
                .WithTags("Analysis");
         }
@@ -71,6 +78,25 @@ namespace KitBackend.Endpoints
             catch (Exception ex)
             {
                 return Results.Problem(detail: $"Failed to retrieve analysis report: {ex.Message}", statusCode: StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        public static async Task<IResult> DownloadReport(Guid id, IAnalysisService analysisService)
+        {
+            try
+            {
+                var report = await analysisService.GetReportByIdAsync(id);
+                if (report == null || string.IsNullOrEmpty(report.PdfPath))
+                {
+                    return Results.NotFound("Report not found or PDF not generated.");
+                }
+
+                var pdfBytes = await File.ReadAllBytesAsync(report.PdfPath);
+                return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(detail: $"Failed to download report: {ex.Message}", statusCode: StatusCodes.Status500InternalServerError);
             }
         }
     }

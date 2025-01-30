@@ -10,6 +10,7 @@ namespace KitBackend.Models.Requests
         public string? SourceType { get; set; }
         public string? Content { get; set; } 
         public int? FileId { get; set; }
+
     }
 
 }

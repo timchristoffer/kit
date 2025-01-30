@@ -14,4 +14,6 @@ public class AnalysisReport : BaseEntity
     public List<string> SecurityIssues { get; set; } = new List<string>();
     public List<string> PerformanceIssues { get; set; } = new List<string>();
     public List<string> ReadabilityIssues { get; set; } = new List<string>();
+    public string Explanation { get; set; } = string.Empty;
+    public string PdfPath { get; set; } = string.Empty;
 }
