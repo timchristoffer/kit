@@ -8,7 +8,7 @@ interface CodeDownloadProps {
 const CodeDownload: React.FC<CodeDownloadProps> = ({ reportId }) => {
   const handleDownload = async () => {
     try {
-      const response = await axios.get(`https://localhost:7129/api/analysis/download/${reportId}`, {
+      const response = await axios.get(`https://kit-backend.onrender.com/api/analysis/download/${reportId}`, {
         responseType: 'blob', // Viktigt för att hantera binära data
       });
 

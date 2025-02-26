@@ -43,7 +43,7 @@ export default function CodeForm() {
         const formData = new FormData();
         formData.append('file', file);
 
-        const fileResponse = await axios.post('https://localhost:7129/api/files', formData, {
+        const fileResponse = await axios.post('https://kit-backend.onrender.com/api/files', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -53,18 +53,18 @@ export default function CodeForm() {
         console.log('File uploaded, fileId:', fileId); // Debugging
 
         // Fetch the file content
-        const fileContentResponse = await axios.get(`https://localhost:7129/api/files/${fileId}`);
+        const fileContentResponse = await axios.get(`https://kit-backend.onrender.com/api/files/${fileId}`);
         const fileContentBase64 = fileContentResponse.data.content;
         const fileContent = atob(fileContentBase64); // Decode base64 content
         console.log('Fetched file content:', fileContent); // Debugging
         setCode(fileContent);
 
-        response = await axios.post('https://localhost:7129/api/analysis', {
+        response = await axios.post('https://kit-backend.onrender.com/api/analysis', {
           sourceType: 'file',
           fileId: fileId,
         });
       } else {
-        response = await axios.post('https://localhost:7129/api/analysis', {
+        response = await axios.post('https://kit-backend.onrender.com/api/analysis', {
           content: submittedCode,
           sourceType: 'text',
         });
