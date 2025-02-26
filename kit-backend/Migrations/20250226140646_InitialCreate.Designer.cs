@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace kit_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250108164547_AddNewColumnsForAnalysReport")]
-    partial class AddNewColumnsForAnalysReport
+    [Migration("20250226140646_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,21 +41,38 @@ namespace kit_backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.PrimitiveCollection<List<string>>("Issues")
                         .IsRequired()
                         .HasColumnType("text[]");
+
+                    b.Property<string>("PdfPath")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.PrimitiveCollection<List<string>>("PerformanceIssues")
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<int>("PerformanceScore")
+                        .HasColumnType("integer");
+
                     b.PrimitiveCollection<List<string>>("ReadabilityIssues")
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<int>("ReadabilityScore")
+                        .HasColumnType("integer");
+
                     b.PrimitiveCollection<List<string>>("SecurityIssues")
                         .IsRequired()
                         .HasColumnType("text[]");
+
+                    b.Property<int>("SecurityScore")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

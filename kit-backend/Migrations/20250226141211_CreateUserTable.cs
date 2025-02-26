@@ -5,7 +5,7 @@
 namespace kit_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateTest : Migration
+    public partial class CreateUserTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
