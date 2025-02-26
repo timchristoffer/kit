@@ -10986,11 +10986,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\timda\\Desktop\\Projekt\\KitTest\\kit\\kit-backend\\kit-backend.csproj",
+      "projectUniqueName": "C:\\Users\\timda\\Desktop\\Projekt\\KIT\\kit-backend\\kit-backend.csproj",
       "projectName": "kit-backend",
-      "projectPath": "C:\\Users\\timda\\Desktop\\Projekt\\KitTest\\kit\\kit-backend\\kit-backend.csproj",
+      "projectPath": "C:\\Users\\timda\\Desktop\\Projekt\\KIT\\kit-backend\\kit-backend.csproj",
       "packagesPath": "C:\\Users\\timda\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\timda\\Desktop\\Projekt\\KitTest\\kit\\kit-backend\\obj\\",
+      "outputPath": "C:\\Users\\timda\\Desktop\\Projekt\\KIT\\kit-backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
