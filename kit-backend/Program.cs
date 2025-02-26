@@ -20,11 +20,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
+        builder.WithOrigins("https://kit-frontend.onrender.com") // Lägg till din frontend-URL här
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
 });
+
 
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAnalysisService, AnalysisService>();
