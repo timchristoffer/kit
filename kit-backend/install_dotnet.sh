@@ -1,8 +1,11 @@
 #!/bin/bash
-# Installera .NET SDK via apt
-apt-get update
-apt-get install -y wget apt-transport-https software-properties-common
-wget https://packages.microsoft.com/config/ubuntu/20.04/prod.list
-mv prod.list /etc/apt/sources.list.d/dotnetdev.list
-apt-get update
-apt-get install -y dotnet-sdk-7.0
+# Ladda ner .NET SDK och installera den lokalt
+
+# Definiera versionen du vill installera
+DOTNET_VERSION="7.0.100"
+
+# Ladda ner .NET SDK i en lokal katalog
+curl -sSL https://dotnet.microsoft.com/download/dotnet/thank-you/dotnet-sdk-${DOTNET_VERSION}-linux-x64-binaries | tar -xz -C /root/.dotnet
+
+# Lägg till .NET SDK i PATH så det kan användas
+export PATH=$PATH:/root/.dotnet
