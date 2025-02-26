@@ -102,12 +102,17 @@ namespace KitBackend.Services
                 try
                 {
                     var pdfPath = _pdfReportService.GeneratePdfReport(report);
+                    if (string.IsNullOrEmpty(pdfPath))
+                    {
+                        throw new Exception("PDF report generation failed: Path is empty.");
+                    }
+
                     report.PdfPath = pdfPath; // Uppdatera PdfPath
                     await _context.SaveChangesAsync(); // Spara ändringen av PdfPath
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Failed to generate PDF report");
+                    _logger.LogError(ex, "Failed to generate PDF report for ReportId: {ReportId}", report.ReportId);
                     throw new Exception("Failed to generate PDF report: " + ex.Message);
                 }
 
