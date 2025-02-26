@@ -43,38 +43,60 @@ export default function CodeForm() {
         const formData = new FormData();
         formData.append('file', file);
 
+        // Logga information om filen som skickas
+        console.log('Uploading file:', file);
+
+        // Filuppladdning
         const fileResponse = await axios.post('https://kit-backend.onrender.com/api/files', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
+        if (!fileResponse.data.id) {
+          throw new Error('File upload failed: No file ID returned.');
+        }
+
         const fileId = fileResponse.data.id;
         console.log('File uploaded, fileId:', fileId); // Debugging
 
-        // Fetch the file content
+        // Hämta filens innehåll
         const fileContentResponse = await axios.get(`https://kit-backend.onrender.com/api/files/${fileId}`);
         const fileContentBase64 = fileContentResponse.data.content;
+        if (!fileContentBase64) {
+          throw new Error('No content found for the uploaded file.');
+        }
+
         const fileContent = atob(fileContentBase64); // Decode base64 content
         console.log('Fetched file content:', fileContent); // Debugging
         setCode(fileContent);
 
+        // Skicka analysbegäran med fileId
         response = await axios.post('https://kit-backend.onrender.com/api/analysis', {
           sourceType: 'file',
           fileId: fileId,
         });
       } else {
+        // Skicka begäran med textinnehåll
         response = await axios.post('https://kit-backend.onrender.com/api/analysis', {
           content: submittedCode,
           sourceType: 'text',
         });
       }
 
+      if (!response.data) {
+        throw new Error('No data returned from the analysis API.');
+      }
+
       setReport(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        // Logga detaljer om Axios-fel
+        console.error('Axios error:', error.response?.data || error.message);
         setError(error.response?.data?.error || error.message);
       } else {
+        // Logga vanliga fel
+        console.error('Error:', error);
         setError((error as Error).message);
       }
     } finally {
@@ -96,11 +118,13 @@ export default function CodeForm() {
         )}
       </div>
       {error && <p className="text-red-500 mt-4">{error}</p>}
-      {report && (
+      {report ? (
         <div className="w-full">
           <AnalysisReport report={report} />
           <CodeDownload reportId={report.reportId} />
         </div>
+      ) : (
+        <p className="text-gray-500 mt-4">Waiting for analysis...</p>
       )}
     </div>
   );
