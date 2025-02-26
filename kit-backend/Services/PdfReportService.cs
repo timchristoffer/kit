@@ -19,6 +19,17 @@ namespace KitBackend.Services
 
         public string GeneratePdfReport(AnalysisReport report)
         {
+            if (report == null)
+            {
+                throw new ArgumentNullException(nameof(report), "Report cannot be null.");
+            }
+
+            // Kontrollera att alla listor är initialiserade om de finns
+            report.Issues ??= new List<string>();
+            report.SecurityIssues ??= new List<string>();
+            report.PerformanceIssues ??= new List<string>();
+            report.ReadabilityIssues ??= new List<string>();
+
             var pdfPath = Path.Combine("Reports", $"{report.ReportId}.pdf");
             Directory.CreateDirectory("Reports");
 
@@ -35,6 +46,7 @@ namespace KitBackend.Services
                     double margin = 40;
                     double yOffset = margin;
 
+                    // Funktion för att rita text
                     void DrawString(string text, XFont font, XBrush brush, double x, double y)
                     {
                         var size = gfx.MeasureString(text, font);
@@ -53,6 +65,7 @@ namespace KitBackend.Services
                         yOffset += size.Height;
                     }
 
+                    // Funktion för att hantera text som ska brytas på flera rader
                     void DrawWrappedString(string text, XFont font, XBrush brush, double x, double y)
                     {
                         var words = text.Split(' ');
@@ -80,16 +93,18 @@ namespace KitBackend.Services
                         }
                     }
 
+                    // Lägg till rapportens titel och ID
                     DrawWrappedString("Analysis Report", title, XBrushes.Black, margin, yOffset);
                     DrawWrappedString($"Report ID: {report.ReportId}", font, XBrushes.Black, margin, yOffset);
 
                     gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
                     yOffset += 10;
 
+                    // Lägg till poäng och diagram
                     DrawWrappedString("Scores", boldFont, XBrushes.Black, margin, yOffset);
-                    yOffset += 10; // Add some space between "Scores" and the chart
+                    yOffset += 10; // Lägg till lite mellanrum
 
-                    // Create a vertical column chart
+                    // Skapa ett vertikalt kolumndiagram
                     var chart = new Chart(ChartType.Column2D);
                     var series = chart.SeriesCollection.AddSeries();
                     series.Add(report.ComplexityScore);
@@ -97,7 +112,7 @@ namespace KitBackend.Services
                     series.Add(report.SecurityScore);
                     series.Add(report.PerformanceScore);
 
-                    // Add labels for the X-axis using XSeries
+                    // Lägg till etiketter för X-axeln
                     var labels = new[] { "Complexity", "Readability", "Security", "Performance" };
                     var xSeries = new XSeries();
                     foreach (var label in labels)
@@ -106,14 +121,13 @@ namespace KitBackend.Services
                     }
                     chart.XValues.Add(xSeries);
 
-                    // Configure the X-axis
+                    // Konfigurera axlar
                     var xAxis = chart.XAxis;
                     xAxis.HasMajorGridlines = true;
                     xAxis.MajorGridlines.LineFormat.Color = XColors.LightGray;
                     xAxis.MajorTickMark = TickMarkType.Outside;
                     xAxis.MinorTickMark = TickMarkType.None;
 
-                    // Configure the Y-axis
                     var yAxis = chart.YAxis;
                     yAxis.Title.Caption = "Values";
                     yAxis.HasMajorGridlines = true;
@@ -124,13 +138,13 @@ namespace KitBackend.Services
                     yAxis.MinorTickMark = TickMarkType.None;
                     yAxis.MajorTick = 20;
 
-                    // Customize the series with specific RGBA colors
-                    series.Elements[0].FillFormat.Color = XColor.FromArgb(51, 255, 99, 132); // Complexity (rgba(255, 99, 132, 0.2))
-                    series.Elements[1].FillFormat.Color = XColor.FromArgb(51, 54, 162, 235); // Readability (rgba(54, 162, 235, 0.2))
-                    series.Elements[2].FillFormat.Color = XColor.FromArgb(51, 255, 206, 86); // Security (rgba(255, 206, 86, 0.2))
-                    series.Elements[3].FillFormat.Color = XColor.FromArgb(51, 75, 192, 192); // Performance (rgba(75, 192, 192, 0.2))
+                    // Anpassa färger på varje serie
+                    series.Elements[0].FillFormat.Color = XColor.FromArgb(51, 255, 99, 132);
+                    series.Elements[1].FillFormat.Color = XColor.FromArgb(51, 54, 162, 235);
+                    series.Elements[2].FillFormat.Color = XColor.FromArgb(51, 255, 206, 86);
+                    series.Elements[3].FillFormat.Color = XColor.FromArgb(51, 75, 192, 192);
 
-                    // Add chart to frame and render
+                    // Lägg till diagrammet
                     var chartFrame = new ChartFrame
                     {
                         Location = new XPoint(margin, yOffset),
@@ -144,6 +158,7 @@ namespace KitBackend.Services
                     gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
                     yOffset += 10;
 
+                    // Lägg till olika issue-sektioner
                     DrawWrappedString("Issues", boldFont, XBrushes.Black, margin, yOffset);
                     foreach (var issue in report.Issues)
                     {
@@ -181,7 +196,6 @@ namespace KitBackend.Services
                     yOffset += 10;
 
                     DrawWrappedString($"Best Practices Feedback: {report.BestPracticesFeedback}", boldFont, XBrushes.Black, margin, yOffset);
-                    //DrawWrappedString($"Explanation: {report.Explanation}", boldFont, XBrushes.Black, margin, yOffset);
 
                     document.Save(pdfPath);
                 }
