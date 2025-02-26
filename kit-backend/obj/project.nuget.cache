@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S5gMTvsa7B8=",
+  "dgSpecHash": "G40Sd0eg8zA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\timda\\Desktop\\Projekt\\KIT\\kit-backend\\kit-backend.csproj",
+  "projectFilePath": "C:\\Users\\timda\\Desktop\\Projekt\\KitTest\\kit\\kit-backend\\kit-backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\timda\\.nuget\\packages\\aspire.npgsql.entityframeworkcore.postgresql\\9.0.0\\aspire.npgsql.entityframeworkcore.postgresql.9.0.0.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
