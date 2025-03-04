@@ -1,10 +1,10 @@
-# Använd den officiella .NET SDK-bilden för version 9.0 som bas
+# AnvÃ¤nd den officiella .NET SDK-bilden fÃ¶r version 9.0 som bas
 FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
 
-# Sätt arbetskatalogen
+# SÃ¤tt arbetskatalogen
 WORKDIR /app
 
-# Kopiera projektfilen och återställ beroenden
+# Kopiera projektfilen och Ã¥terstÃ¤ll beroenden
 COPY *.csproj ./
 RUN dotnet restore
 
@@ -12,11 +12,24 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Använd runtime-bilden för .NET 9.0 för att köra applikationen
+# AnvÃ¤nd runtime-bilden fÃ¶r .NET 9.0 fÃ¶r att kÃ¶ra applikationen
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview
+
+# Installera Node.js och npm
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=build /app/out ./
 
-# Exponera porten som appen kör på
+# LÃ¤gg till fonts fÃ¶r PDF-generering
+RUN apt-get update && apt-get install -y \
+    fontconfig \
+    fonts-liberation \
+    && fc-cache -f -v
+
+# Exponera porten som appen kÃ¶r pÃ¥
 EXPOSE 80
 CMD ["dotnet", "kit-backend.dll"]

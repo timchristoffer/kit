@@ -62,9 +62,9 @@ namespace KitBackend.Services
                     {
                         var page = document.AddPage();
                         var gfx = XGraphics.FromPdfPage(page);
-                        var title = new XFont("sans-serif", 20, XFontStyleEx.Bold);
-                        var font = new XFont("sans-serif", 12);
-                        var boldFont = new XFont("sans-serif", 12, XFontStyleEx.Bold);
+                        var title = new XFont("Arial", 20, XFontStyleEx.Bold);
+                        var font = new XFont("Arial", 12);
+                        var boldFont = new XFont("Arial", 12, XFontStyleEx.Bold);
 
                         double margin = 40;
                         double yOffset = margin;
