@@ -30,8 +30,10 @@ namespace KitBackend.Services
             report.PerformanceIssues ??= new List<string>();
             report.ReadabilityIssues ??= new List<string>();
 
-            var pdfPath = Path.Combine("Reports", $"{report.ReportId}.pdf");
-            Directory.CreateDirectory("Reports");
+            var tempPath = Path.GetTempPath();
+            var reportFolder = Path.Combine(tempPath, "Reports");
+            Directory.CreateDirectory(reportFolder);
+            var pdfPath = Path.Combine(reportFolder, $"{report.ReportId}.pdf");
 
             try
             {
@@ -39,9 +41,9 @@ namespace KitBackend.Services
                 {
                     var page = document.AddPage();
                     var gfx = XGraphics.FromPdfPage(page);
-                    var title = new XFont("Verdana", 20, XFontStyleEx.Bold);
-                    var font = new XFont("Verdana", 12);
-                    var boldFont = new XFont("Verdana", 12, XFontStyleEx.Bold);
+                    var title = new XFont("Arial", 20, XFontStyleEx.Bold);
+                    var font = new XFont("Arial", 12);
+                    var boldFont = new XFont("Arial", 12, XFontStyleEx.Bold);
 
                     double margin = 40;
                     double yOffset = margin;
