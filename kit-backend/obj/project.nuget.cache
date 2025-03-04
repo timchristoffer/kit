@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "S5gMTvsa7B8=",
+  "dgSpecHash": "qE3lhiTq8Y4=",
   "success": true,
   "projectFilePath": "C:\\Users\\timda\\Desktop\\Projekt\\KIT\\kit-backend\\kit-backend.csproj",
   "expectedPackageFiles": [
@@ -8,9 +8,9 @@
     "C:\\Users\\timda\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
-    "C:\\Users\\timda\\.nuget\\packages\\itext\\9.0.0\\itext.9.0.0.nupkg.sha512",
-    "C:\\Users\\timda\\.nuget\\packages\\itext.commons\\9.0.0\\itext.commons.9.0.0.nupkg.sha512",
-    "C:\\Users\\timda\\.nuget\\packages\\itext7\\9.0.0\\itext7.9.0.0.nupkg.sha512",
+    "C:\\Users\\timda\\.nuget\\packages\\itext\\9.1.0\\itext.9.1.0.nupkg.sha512",
+    "C:\\Users\\timda\\.nuget\\packages\\itext.commons\\9.1.0\\itext.commons.9.1.0.nupkg.sha512",
+    "C:\\Users\\timda\\.nuget\\packages\\itext7\\9.1.0\\itext7.9.1.0.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\microsoft.build\\17.7.2\\microsoft.build.17.7.2.nupkg.sha512",
     "C:\\Users\\timda\\.nuget\\packages\\microsoft.build.framework\\17.8.3\\microsoft.build.framework.17.8.3.nupkg.sha512",

@@ -92,7 +92,7 @@
           }
         }
       },
-      "itext/9.0.0": {
+      "itext/9.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.DotNet.PlatformAbstractions": "1.1.0",
@@ -109,7 +109,7 @@
           "System.Threading.Thread": "4.3.0",
           "System.Threading.ThreadPool": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0",
-          "itext.commons": "9.0.0"
+          "itext.commons": "9.1.0"
         },
         "compile": {
           "lib/netstandard2.0/itext.barcodes.dll": {
@@ -182,7 +182,7 @@
           }
         }
       },
-      "itext.commons/9.0.0": {
+      "itext.commons/9.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging": "5.0.0",
@@ -199,10 +199,10 @@
           }
         }
       },
-      "itext7/9.0.0": {
+      "itext7/9.1.0": {
         "type": "package",
         "dependencies": {
-          "itext": "9.0.0"
+          "itext": "9.1.0"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
@@ -4021,17 +4021,17 @@
         "logo.png"
       ]
     },
-    "itext/9.0.0": {
-      "sha512": "Y2nDUrXDO7eZ+dI2NZ10apW818OcgGklMWpLrVZ/P16rwSxpVyzjWZQjCgZVj8liSVhVDHy6eVJOrZah5KNhhQ==",
+    "itext/9.1.0": {
+      "sha512": "4aPC+8MlF78KX7/Ad0BusGpliO5RMNzJU/jOxoDrHLpP92go3fKcaULVIhuaX24gnaJpoCX5Xf+HfvhcBdEjYw==",
       "type": "package",
-      "path": "itext/9.0.0",
+      "path": "itext/9.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ITSC-avatar.png",
         "LICENSE.md",
         "gnu-agpl-v3.0.md",
-        "itext.9.0.0.nupkg.sha512",
+        "itext.9.1.0.nupkg.sha512",
         "itext.nuspec",
         "lib/net461/itext.barcodes.dll",
         "lib/net461/itext.barcodes.xml",
@@ -4079,15 +4079,15 @@
         "lib/netstandard2.0/itext.svg.xml"
       ]
     },
-    "itext.commons/9.0.0": {
-      "sha512": "mfQuZz4beW2GOHMrtGay5iowg6WINBkHMm7hj38el3eDvWY3yLVZGrVxdWVRhEXJIdsXsBa3lPywxspsqi3rxg==",
+    "itext.commons/9.1.0": {
+      "sha512": "oaUKSbmWg0zhOmyElnL+52yRvn+m39LxfqdXJGjHHR7ypC3MdOpfyb/GkQ4mFRMlXwyO2srLzgnZ+cN6zAjMXw==",
       "type": "package",
-      "path": "itext.commons/9.0.0",
+      "path": "itext.commons/9.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ITSC-avatar.png",
-        "itext.commons.9.0.0.nupkg.sha512",
+        "itext.commons.9.1.0.nupkg.sha512",
         "itext.commons.nuspec",
         "lib/net461/itext.commons.dll",
         "lib/net461/itext.commons.xml",
@@ -4095,17 +4095,17 @@
         "lib/netstandard2.0/itext.commons.xml"
       ]
     },
-    "itext7/9.0.0": {
-      "sha512": "WcRaL2xYhRWJrNXHlfWi9Cr/YApvFtDSEMvJlnbbSEUyYzYcwk52QJL/IAiP4T/O5U+rkzn6dIIwbeITUzsBLA==",
+    "itext7/9.1.0": {
+      "sha512": "xHRttMKi/9W7XDIIWRgMoau3Eo2+4JvctqN25X8a0k8uHFf56WgIMjFnGadH1nACJy+5ABi3XoWvJsUv20Wd2w==",
       "type": "package",
-      "path": "itext7/9.0.0",
+      "path": "itext7/9.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "ITSC-avatar.png",
         "LICENSE.md",
         "gnu-agpl-v3.0.md",
-        "itext7.9.0.0.nupkg.sha512",
+        "itext7.9.1.0.nupkg.sha512",
         "itext7.nuspec"
       ]
     },
@@ -10976,7 +10976,7 @@
       "Microsoft.ML >= 4.0.0",
       "PdfSharp >= 6.1.1",
       "Swashbuckle.AspNetCore >= 7.2.0",
-      "itext7 >= 9.0.0"
+      "itext7 >= 9.1.0"
     ]
   },
   "packageFolders": {
@@ -11082,7 +11082,7 @@
           },
           "itext7": {
             "target": "Package",
-            "version": "[9.0.0, )"
+            "version": "[9.1.0, )"
           }
         },
         "imports": [
