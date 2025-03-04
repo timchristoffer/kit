@@ -26,7 +26,7 @@ export default function CodeInputForm({ onSubmit, loading, submitted }: CodeInpu
   return (
     <form
       onSubmit={handleSubmit}
-      className={`space-y-4 p-2 md:p-4 bg-slate-900 rounded-md max-w-full mx-auto transition-all duration-300 ${
+      className={`space-y-4 p-2 md:p-4 bg-[#17213a] rounded-md max-w-full mx-auto transition-all duration-300 ${
         submitted ? 'lg:max-w-md' : 'md:max-w-2xl'
       }`}
     >
