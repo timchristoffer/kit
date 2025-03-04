@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { ChevronDownIcon, ChevronUpIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { lato } from '@/app/styles/fonts';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -74,7 +75,7 @@ export default function AnalysisReport({ report }: AnalysisReportProps) {
   // }, {} as Record<string, string>);
 
   return (
-    <div className="p-4 bg-slate-900 mt-4 rounded-md shadow-md">
+    <div className={lato.className + " p-4 bg-slate-900 mt-4 rounded-md shadow-md"}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-white">Analysis Report</h2>
         <button onClick={toggleModalVisibility} className="text-white hover:text-blue-800 focus:outline-none">

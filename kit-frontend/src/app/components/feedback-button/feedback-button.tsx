@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import emailjs from 'emailjs-com';
+import { lato } from '@/app/styles/fonts';
 
 export default function FeedbackButton() {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -58,7 +59,7 @@ export default function FeedbackButton() {
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 rows={5}
-                className="w-full p-2 border border-gray-300 rounded-md text-[#142d55]"
+                className={lato.className + " w-full p-2 border border-gray-300 rounded-md text-[#142d55]"}
                 placeholder="Write your feedback here..."
               />
               <button
@@ -73,7 +74,7 @@ export default function FeedbackButton() {
         </div>
       )}
       {isFeedbackSent && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md">
+        <div className={lato.className + " fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-md"}>
           Feedback sent successfully!
         </div>
       )}

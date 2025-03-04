@@ -5,6 +5,7 @@ import CodeInputForm from '../code-input/code-input';
 import AnalysisReport from '../code-analysis/code-analysis';    
 import CodeDisplay from '../code-display/code-display';
 import CodeDownload from '../code-download/code-download';
+import { space_grotesk, lato } from '@/app/styles/fonts';
 
 interface Report {
   reportId: string; // Lägg till reportId här
@@ -106,7 +107,12 @@ export default function CodeForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Keep It Tidy - KIT</h1>
+    <div className="flex items-center justify-center mb-4">
+      <h1 className={space_grotesk.className + " text-2xl font-bold select-none"}>Keep It Tidy</h1>
+      <div className="">
+        <h1 className={lato.className + " transform rotate-12 hover:rotate-0 transition-transform duration-300 text-xl text-red-600 select-none"}>BETA</h1>
+      </div>
+    </div>
       <div className={`flex flex-col ${code ? 'lg:flex-row' : ''} w-full space-y-4 lg:space-y-0 lg:space-x-4`}>
         <div className={`flex-1 ${code ? '' : 'mx-auto'}`}>
           <CodeInputForm onSubmit={handleSubmit} loading={loading} submitted={submitted} />
@@ -124,7 +130,7 @@ export default function CodeForm() {
           <CodeDownload reportId={report.reportId} />
         </div>
       ) : (
-        <p className="text-gray-500 mt-4">Waiting for analysis...</p>
+        <p className="text-gray-500 mt-4">Remember that this project is a work in progress, any feedback is appreciated</p>
       )}
     </div>
   );
