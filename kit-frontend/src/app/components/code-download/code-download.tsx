@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { lato } from '@/app/styles/fonts';
 
 interface CodeDownloadProps {
   reportId: string;
@@ -28,10 +27,10 @@ const CodeDownload: React.FC<CodeDownloadProps> = ({ reportId }) => {
 
   return (
     <button
-      // onClick={handleDownload}
-      className={lato.className + " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 rounded focus:outline-none focus:shadow-outline"}
+      onClick={handleDownload}
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 rounded focus:outline-none focus:shadow-outline"
     >
-      Download Report Coming Soon
+      Currently not working :D 
     </button>
   );
 };
