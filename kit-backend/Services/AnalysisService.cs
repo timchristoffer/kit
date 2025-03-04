@@ -146,6 +146,12 @@ namespace KitBackend.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateReportAsync(AnalysisReport report)
+        {
+            _context.AnalysisReport.Update(report);
+            await _context.SaveChangesAsync();
+        }
+
          // Readability Score
         private int CalculateReadabilityScore(string code)
         {

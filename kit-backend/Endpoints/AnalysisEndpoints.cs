@@ -100,20 +100,31 @@ namespace KitBackend.Endpoints
                 }
                 else
                 {
-                    // Om PDF inte finns i databasen, generera den
-                    var (_, content) = pdfReportService.GeneratePdfReport(report);
-                    pdfBytes = content;
-                    
-                    // Spara för framtida användning (om det finns en metod för detta)
-                    report.PdfContent = pdfBytes;
-                    // Om du har en UpdateReportAsync-metod, använd den här
+                    try
+                    {
+                        // Om PDF inte finns i databasen, generera den
+                        var (_, content) = pdfReportService.GeneratePdfReport(report);
+                        pdfBytes = content;
+                        
+                        // Spara för framtida användning
+                        report.PdfContent = pdfBytes;
+                        await analysisService.UpdateReportAsync(report);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Results.Problem(
+                            detail: $"Failed to generate PDF: {ex.Message}", 
+                            statusCode: StatusCodes.Status500InternalServerError);
+                    }
                 }
 
                 return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
             }
             catch (Exception ex)
             {
-                return Results.Problem(detail: $"Failed to download report: {ex.Message}", statusCode: StatusCodes.Status500InternalServerError);
+                return Results.Problem(
+                    detail: $"Failed to download report: {ex.Message}", 
+                    statusCode: StatusCodes.Status500InternalServerError);
             }
         }
     }

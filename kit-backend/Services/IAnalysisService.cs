@@ -11,5 +11,6 @@ namespace KitBackend.Services
         Task<AnalysisReport> GetReportByIdAsync(Guid id);
         Task SaveAnalysisStatusAsync(AnalysisStatus status);
         Task UpdateAnalysisStatusAsync(AnalysisStatus status);
+        Task UpdateReportAsync(AnalysisReport report);
     }
 }
