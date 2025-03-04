@@ -81,7 +81,7 @@ namespace KitBackend.Endpoints
             }
         }
 
-        public static async Task<IResult> DownloadReport(Guid id, IAnalysisService analysisService)
+        public static async Task<IResult> DownloadReport(Guid id, IAnalysisService analysisService, PdfReportService pdfReportService)
         {
             try
             {
@@ -91,20 +91,25 @@ namespace KitBackend.Endpoints
                     return Results.NotFound("Report not found.");
                 }
 
+                byte[] pdfBytes;
+                
                 // Kontrollera om PDF-innehållet finns i databasen
                 if (report.PdfContent != null && report.PdfContent.Length > 0)
                 {
-                    return Results.File(report.PdfContent, "application/pdf", $"{id}.pdf");
+                    pdfBytes = report.PdfContent;
                 }
-                
-                // Fallback: om innehållet inte finns i databasen, försök läsa från filen
-                if (!string.IsNullOrEmpty(report.PdfPath) && File.Exists(report.PdfPath))
+                else
                 {
-                    var pdfBytes = await File.ReadAllBytesAsync(report.PdfPath);
-                    return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
+                    // Om PDF inte finns i databasen, generera den
+                    var (_, content) = pdfReportService.GeneratePdfReport(report);
+                    pdfBytes = content;
+                    
+                    // Spara för framtida användning (om det finns en metod för detta)
+                    report.PdfContent = pdfBytes;
+                    // Om du har en UpdateReportAsync-metod, använd den här
                 }
 
-                return Results.NotFound("PDF not found for this report.");
+                return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
             }
             catch (Exception ex)
             {
