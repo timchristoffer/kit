@@ -101,19 +101,17 @@ namespace KitBackend.Services
                 // Generera PDF-rapport
                 try
                 {
+                    _logger.LogInformation("Generating PDF report for analysis {ReportId}", report.ReportId);
                     var pdfPath = _pdfReportService.GeneratePdfReport(report);
-                    if (string.IsNullOrEmpty(pdfPath))
-                    {
-                        throw new Exception("PDF report generation failed: Path is empty.");
-                    }
-
-                    report.PdfPath = pdfPath; // Uppdatera PdfPath
-                    await _context.SaveChangesAsync(); // Spara ändringen av PdfPath
+                    report.PdfPath = pdfPath;
+                    await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Failed to generate PDF report for ReportId: {ReportId}", report.ReportId);
-                    throw new Exception("Failed to generate PDF report: " + ex.Message);
+                    _logger.LogError(ex, "Failed to generate PDF report for ReportId: {ReportId}. Analysis will continue without PDF.", report.ReportId);
+                    // Fortsätt utan att felja helt på grund av PDF-fel
+                    report.PdfPath = "PDF generation failed: " + ex.Message;
+                    await _context.SaveChangesAsync();
                 }
 
                 // Returnera rapporten och PDF-sökvägen
