@@ -102,8 +102,9 @@ namespace KitBackend.Services
                 try
                 {
                     _logger.LogInformation("Generating PDF report for analysis {ReportId}", report.ReportId);
-                    var pdfPath = _pdfReportService.GeneratePdfReport(report);
+                    var (pdfPath, pdfContent) = _pdfReportService.GeneratePdfReport(report);
                     report.PdfPath = pdfPath;
+                    report.PdfContent = pdfContent; // Spara PDF-innehållet direkt i databasen
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -111,9 +112,10 @@ namespace KitBackend.Services
                     _logger.LogError(ex, "Failed to generate PDF report for ReportId: {ReportId}. Analysis will continue without PDF.", report.ReportId);
                     // Fortsätt utan att felja helt på grund av PDF-fel
                     report.PdfPath = "PDF generation failed: " + ex.Message;
+                    report.PdfContent = null; // Sätt explicit till null för tydlighets skull
                     await _context.SaveChangesAsync();
-                }
 
+                }
                 // Returnera rapporten och PDF-sökvägen
                 return report;
             }

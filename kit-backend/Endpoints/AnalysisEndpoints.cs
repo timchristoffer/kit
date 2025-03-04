@@ -86,13 +86,25 @@ namespace KitBackend.Endpoints
             try
             {
                 var report = await analysisService.GetReportByIdAsync(id);
-                if (report == null || string.IsNullOrEmpty(report.PdfPath))
+                if (report == null)
                 {
-                    return Results.NotFound("Report not found or PDF not generated.");
+                    return Results.NotFound("Report not found.");
                 }
 
-                var pdfBytes = await File.ReadAllBytesAsync(report.PdfPath);
-                return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
+                // Kontrollera om PDF-innehållet finns i databasen
+                if (report.PdfContent != null && report.PdfContent.Length > 0)
+                {
+                    return Results.File(report.PdfContent, "application/pdf", $"{id}.pdf");
+                }
+                
+                // Fallback: om innehållet inte finns i databasen, försök läsa från filen
+                if (!string.IsNullOrEmpty(report.PdfPath) && File.Exists(report.PdfPath))
+                {
+                    var pdfBytes = await File.ReadAllBytesAsync(report.PdfPath);
+                    return Results.File(pdfBytes, "application/pdf", $"{id}.pdf");
+                }
+
+                return Results.NotFound("PDF not found for this report.");
             }
             catch (Exception ex)
             {

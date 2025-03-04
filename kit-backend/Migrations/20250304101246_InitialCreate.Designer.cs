@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace kit_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250226154731_InitialCreate")]
+    [Migration("20250304101246_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -48,6 +48,9 @@ namespace kit_backend.Migrations
                     b.PrimitiveCollection<List<string>>("Issues")
                         .IsRequired()
                         .HasColumnType("text[]");
+
+                    b.Property<byte[]>("PdfContent")
+                        .HasColumnType("bytea");
 
                     b.Property<string>("PdfPath")
                         .IsRequired()

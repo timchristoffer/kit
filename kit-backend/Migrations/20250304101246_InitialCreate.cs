@@ -29,6 +29,7 @@ namespace kit_backend.Migrations
                     ReadabilityIssues = table.Column<List<string>>(type: "text[]", nullable: false),
                     Explanation = table.Column<string>(type: "text", nullable: false),
                     PdfPath = table.Column<string>(type: "text", nullable: false),
+                    PdfContent = table.Column<byte[]>(type: "bytea", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
