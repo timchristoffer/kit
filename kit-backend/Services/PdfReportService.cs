@@ -1,17 +1,13 @@
 using KitBackend.Models.Responses;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using PdfSharp.Charting;
 using System;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using System.Text;
-using System.Collections.Generic;
 using System.Threading;
 using System.Globalization;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Kernel.Font;
-using iText.IO.Font.Constants;
 
 namespace KitBackend.Services
 {
@@ -19,7 +15,7 @@ namespace KitBackend.Services
     {
         private readonly ILogger<PdfReportService> _logger;
 
-        // Statisk konstruktor för att konfigurera PDF-miljö
+        // Statisk konstruktor för att konfigurera PDF-miljön
         static PdfReportService()
         {
             // Sätt kulturinställningar för att undvika problem med formatering
@@ -35,6 +31,7 @@ namespace KitBackend.Services
             _logger = logger;
         }
 
+        // Ändra returtypen till en tuple med både sökväg och innehåll
         public (string filePath, byte[] content) GeneratePdfReport(AnalysisReport report)
         {
             if (report == null)
@@ -44,7 +41,7 @@ namespace KitBackend.Services
 
             _logger.LogInformation("Starting PDF generation for report ID: {ReportId}", report.ReportId);
 
-            // Säkerställ att alla listor är initialiserade
+            // Kontrollera att alla listor är initialiserade om de finns
             report.Issues ??= new List<string>();
             report.SecurityIssues ??= new List<string>();
             report.PerformanceIssues ??= new List<string>();
@@ -53,108 +50,144 @@ namespace KitBackend.Services
 
             var tempPath = Path.GetTempPath();
             var reportFolder = Path.Combine(tempPath, "Reports");
-            
-            try
-            {
-                Directory.CreateDirectory(reportFolder);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Could not create directory {Path}, using temp path instead", reportFolder);
-                reportFolder = tempPath;
-            }
-            
+            Directory.CreateDirectory(reportFolder);
             var pdfPath = Path.Combine(reportFolder, $"{report.ReportId}.pdf");
             byte[] pdfContent;
 
             try
             {
-                using (var memoryStream = new MemoryStream())
+                using (var ms = new MemoryStream())
                 {
-                    // Skapa en PDF med iText 7
-                    using (var writer = new PdfWriter(memoryStream))
+                    using (var document = new PdfDocument())
                     {
-                        using (var pdf = new PdfDocument(writer))
+                        var page = document.AddPage();
+                        var gfx = XGraphics.FromPdfPage(page);
+                        var title = new XFont("Arial", 20, XFontStyleEx.Bold);
+                        var font = new XFont("Arial", 12);
+                        var boldFont = new XFont("Arial", 12, XFontStyleEx.Bold);
+
+                        double margin = 40;
+                        double yOffset = margin;
+
+                        // Funktion för att rita text
+                        void DrawString(string text, XFont font, XBrush brush, double x, double y)
                         {
-                            var document = new Document(pdf);
+                            var size = gfx.MeasureString(text, font);
+                            var rect = new XRect(x, y, page.Width - 2 * margin, page.Height - 2 * margin);
+                            var format = XStringFormats.TopLeft;
 
-                            // Lägg till titel
-                            document.Add(new Paragraph("Analysis Report")
-                                .SetFontSize(20)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-
-                            document.Add(new Paragraph($"Report ID: {report.ReportId}"));
-                            document.Add(new Paragraph("\n"));
-
-                            // Lägg till poäng
-                            document.Add(new Paragraph("Scores")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            document.Add(new Paragraph($"Complexity: {report.ComplexityScore}"));
-                            document.Add(new Paragraph($"Readability: {report.ReadabilityScore}"));
-                            document.Add(new Paragraph($"Security: {report.SecurityScore}"));
-                            document.Add(new Paragraph($"Performance: {report.PerformanceScore}"));
-                            document.Add(new Paragraph("\n"));
-
-                            // Lägg till problem
-                            document.Add(new Paragraph("Issues")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            foreach (var issue in report.Issues)
+                            if (y + size.Height > page.Height - margin)
                             {
-                                document.Add(new Paragraph($"• {issue}"));
+                                page = document.AddPage();
+                                gfx = XGraphics.FromPdfPage(page);
+                                yOffset = margin;
+                                rect = new XRect(x, yOffset, page.Width - 2 * margin, page.Height - 2 * margin);
                             }
-                            document.Add(new Paragraph("\n"));
 
-                            document.Add(new Paragraph("Security Issues")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            foreach (var issue in report.SecurityIssues)
-                            {
-                                document.Add(new Paragraph($"• {issue}"));
-                            }
-                            document.Add(new Paragraph("\n"));
-
-                            document.Add(new Paragraph("Performance Issues")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            foreach (var issue in report.PerformanceIssues)
-                            {
-                                document.Add(new Paragraph($"• {issue}"));
-                            }
-                            document.Add(new Paragraph("\n"));
-
-                            document.Add(new Paragraph("Readability Issues")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            foreach (var issue in report.ReadabilityIssues)
-                            {
-                                document.Add(new Paragraph($"• {issue}"));
-                            }
-                            document.Add(new Paragraph("\n"));
-
-                            document.Add(new Paragraph("Best Practices Feedback")
-                                .SetFontSize(16)
-                                .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
-                            document.Add(new Paragraph(report.BestPracticesFeedback));
+                            gfx.DrawString(text, font, brush, rect, format);
+                            yOffset += size.Height;
                         }
+
+                        // Funktion för att hantera text som ska brytas på flera rader
+                        void DrawWrappedString(string text, XFont font, XBrush brush, double x, double y)
+                        {
+                            if (string.IsNullOrEmpty(text))
+                                return;
+
+                            var words = text.Split(' ');
+                            var line = string.Empty;
+
+                            foreach (var word in words)
+                            {
+                                var testLine = string.IsNullOrEmpty(line) ? word : line + " " + word;
+                                var size = gfx.MeasureString(testLine, font);
+
+                                if (size.Width > page.Width - 2 * margin)
+                                {
+                                    DrawString(line, font, brush, x, yOffset);
+                                    line = word;
+                                }
+                                else
+                                {
+                                    line = testLine;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                DrawString(line, font, brush, x, yOffset);
+                            }
+                        }
+
+                        // Lägg till rapportens titel och ID
+                        DrawWrappedString("Analysis Report", title, XBrushes.Black, margin, yOffset);
+                        DrawWrappedString($"Report ID: {report.ReportId}", font, XBrushes.Black, margin, yOffset);
+
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        // Lägg till poäng utan diagram för bättre stabilitet
+                        DrawWrappedString("Scores", boldFont, XBrushes.Black, margin, yOffset);
+                        yOffset += 10;
+
+                        DrawWrappedString($"Complexity: {report.ComplexityScore}", font, XBrushes.Black, margin, yOffset);
+                        DrawWrappedString($"Readability: {report.ReadabilityScore}", font, XBrushes.Black, margin, yOffset);
+                        DrawWrappedString($"Security: {report.SecurityScore}", font, XBrushes.Black, margin, yOffset);
+                        DrawWrappedString($"Performance: {report.PerformanceScore}", font, XBrushes.Black, margin, yOffset);
+                        
+                        yOffset += 20;
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        // Lägg till olika issue-sektioner
+                        DrawWrappedString("Issues", boldFont, XBrushes.Black, margin, yOffset);
+                        foreach (var issue in report.Issues)
+                        {
+                            DrawWrappedString($"• {issue}", font, XBrushes.Black, margin, yOffset);
+                        }
+
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        DrawWrappedString("Security Issues", boldFont, XBrushes.Black, margin, yOffset);
+                        foreach (var issue in report.SecurityIssues)
+                        {
+                            DrawWrappedString($"• {issue}", font, XBrushes.Black, margin, yOffset);
+                        }
+
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        DrawWrappedString("Performance Issues", boldFont, XBrushes.Black, margin, yOffset);
+                        foreach (var issue in report.PerformanceIssues)
+                        {
+                            DrawWrappedString($"• {issue}", font, XBrushes.Black, margin, yOffset);
+                        }
+
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        DrawWrappedString("Readability Issues", boldFont, XBrushes.Black, margin, yOffset);
+                        foreach (var issue in report.ReadabilityIssues)
+                        {
+                            DrawWrappedString($"• {issue}", font, XBrushes.Black, margin, yOffset);
+                        }
+
+                        gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                        yOffset += 10;
+
+                        DrawWrappedString($"Best Practices Feedback:", boldFont, XBrushes.Black, margin, yOffset);
+                        DrawWrappedString(report.BestPracticesFeedback, font, XBrushes.Black, margin, yOffset);
+
+                        // Spara dokumentet både till fil och till MemoryStream
+                        document.Save(pdfPath);
+                        document.Save(ms);
                     }
-
-                    pdfContent = memoryStream.ToArray();
+                    
+                    // Hämta PDF-innehållet från MemoryStream
+                    pdfContent = ms.ToArray();
                 }
-
-                // Försök spara till fil om möjligt
-                try
-                {
-                    File.WriteAllBytes(pdfPath, pdfContent);
-                    _logger.LogInformation("PDF saved to {Path}", pdfPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Could not save PDF to file system, but PDF was generated in memory");
-                    pdfPath = "Memory only - " + report.ReportId.ToString();
-                }
-
+                
                 _logger.LogInformation("PDF generation completed successfully for report ID: {ReportId}", report.ReportId);
                 return (pdfPath, pdfContent);
             }
