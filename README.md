@@ -192,8 +192,9 @@ The project uses the following technologies:
    
 #### Deployment
 Deployment occurs via Github Actions:
- * Backend is deployed on Azure.
- * Frontend is deployed via Vercel (Next.js)
+ * Frontend is deployed via Render.
+ * Backend is deployed on Render.
+ * Database is deployed on Render.
 
 
 ### Testing
