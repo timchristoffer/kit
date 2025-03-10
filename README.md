@@ -13,10 +13,9 @@ A simple app to keep your code tidy by reviewing it and generating reports.
 3. [Technologies](#technologies)
 4. [Core Features](#core-features)
 5. [API](#api)
-6. [Authentication](#authentication)
-7. [Development Workflow](#development-workflow)
-8. [Testing](#testing)
-9. [Improvements & Features](#improvements--features)
+6. [Development Workflow](#development-workflow)
+7. [Testing](#testing)
+8. [Improvements & Features](#improvements--features)
 
 
 ---
