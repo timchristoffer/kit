@@ -18,11 +18,17 @@ namespace kit_backend.Migrations
                 columns: table => new
                 {
                     ReportId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FileId = table.Column<Guid>(type: "uuid", nullable: true),
-                    SnippetId = table.Column<Guid>(type: "uuid", nullable: true),
                     BestPracticesFeedback = table.Column<string>(type: "text", nullable: false),
                     ComplexityScore = table.Column<int>(type: "integer", nullable: false),
+                    ReadabilityScore = table.Column<int>(type: "integer", nullable: false),
+                    SecurityScore = table.Column<int>(type: "integer", nullable: false),
+                    PerformanceScore = table.Column<int>(type: "integer", nullable: false),
                     Issues = table.Column<List<string>>(type: "text[]", nullable: false),
+                    SecurityIssues = table.Column<List<string>>(type: "text[]", nullable: false),
+                    PerformanceIssues = table.Column<List<string>>(type: "text[]", nullable: false),
+                    ReadabilityIssues = table.Column<List<string>>(type: "text[]", nullable: false),
+                    Explanation = table.Column<string>(type: "text", nullable: false),
+                    PdfPath = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -36,10 +42,9 @@ namespace kit_backend.Migrations
                 columns: table => new
                 {
                     RequestId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SourceType = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    SourceType = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    FileId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {

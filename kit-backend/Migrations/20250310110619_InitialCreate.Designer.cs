@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace kit_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250105115859_AddedFileToAnalysisRequest")]
-    partial class AddedFileToAnalysisRequest
+    [Migration("20250310110619_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,63 @@ namespace kit_backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AnalysisReport", b =>
+                {
+                    b.Property<Guid>("ReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BestPracticesFeedback")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ComplexityScore")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.PrimitiveCollection<List<string>>("Issues")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("PdfPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.PrimitiveCollection<List<string>>("PerformanceIssues")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<int>("PerformanceScore")
+                        .HasColumnType("integer");
+
+                    b.PrimitiveCollection<List<string>>("ReadabilityIssues")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<int>("ReadabilityScore")
+                        .HasColumnType("integer");
+
+                    b.PrimitiveCollection<List<string>>("SecurityIssues")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<int>("SecurityScore")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ReportId");
+
+                    b.ToTable("AnalysisReport");
+                });
 
             modelBuilder.Entity("KitBackend.Models.Data.CodeSnippet", b =>
                 {
@@ -189,40 +246,6 @@ namespace kit_backend.Migrations
                     b.HasKey("RequestId");
 
                     b.ToTable("AnalysisRequest");
-                });
-
-            modelBuilder.Entity("KitBackend.Models.Responses.AnalysisReport", b =>
-                {
-                    b.Property<Guid>("ReportId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("BestPracticesFeedback")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ComplexityScore")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("FileId")
-                        .HasColumnType("uuid");
-
-                    b.PrimitiveCollection<List<string>>("Issues")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
-                    b.Property<Guid?>("SnippetId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ReportId");
-
-                    b.ToTable("AnalysisReport");
                 });
 
             modelBuilder.Entity("KitBackend.Models.Responses.AnalysisStatus", b =>
