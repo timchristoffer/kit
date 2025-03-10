@@ -91,7 +91,9 @@ The project uses the following technologies:
 
 ### API
 
-#### Analyze Code
+#### Analysis API
+
+##### Analyze Code
 **Endpoint:** `POST /api/analysis`
 - **Description:** Analyzes a given code snippet or file and returns an analysis report.
 - **Request Body:**
@@ -121,9 +123,9 @@ The project uses the following technologies:
   - `200 OK`: Returns the PDF file.
   - `404 Not Found`: If the report or PDF does not exist.
 
-### Code Snippet API
+#### Code Snippet API
 
-#### Create Code Snippet
+##### Create Code Snippet
 **Endpoint:** `POST /api/codesnippets`
 - **Description:** Creates a new code snippet.
 - **Request Body:**
@@ -143,9 +145,9 @@ The project uses the following technologies:
   - `200 OK`: Returns a `CodeSnippet`.
   - `404 Not Found`: If snippet does not exist.
 
-### File API
+#### File API
 
-#### Upload File
+##### Upload File
 **Endpoint:** `POST /api/files`
 - **Description:** Uploads a source code file for analysis.
 - **Request:** Form-data with a file.
@@ -161,9 +163,9 @@ The project uses the following technologies:
   - `200 OK`: Returns file metadata and content.
   - `404 Not Found`: If file does not exist.
 
-### User API
+#### User API
 
-#### Create User
+##### Create User
 **Endpoint:** `POST /users`
 - **Description:** Creates a new user.
 - **Request Body:**
@@ -183,11 +185,6 @@ The project uses the following technologies:
 - **Responses:**
   - `200 OK`: Returns the user.
   - `404 Not Found`: If user does not exist.
-
-
-
-### Authentication
-
 
 ### Development Workflow
 #### Local Development Flow
