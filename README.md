@@ -48,6 +48,17 @@ npm install # For frontend (Next.js)
 dotnet restore # For backend (C#)
 ```
 
+Setting up local database:
+```bash
+Make sure to update `DefaultConnection` in `appsettings.json`
+```
+```bash
+dotnet ef migrations add InitialCreate
+```
+```bash
+dotnet ef database update
+```
+
 
 #### Running the Project Locally
 ```bash
