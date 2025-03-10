@@ -64,7 +64,6 @@ The project uses the following technologies:
  * **Frontend:** Next.js, React
  * **Backend:** C#, .NET Core WebAPI, .NET 9
  * **Database:** PostgreSQL (pgAdmin4)
- * **Authentication:** OAuth 2.0 (GitHub, Google, Microsoft)
  * **API Specification:** Swagger/OpenAPI
  * **Testing:** Jest (frontend), xUnit (backend)
 
@@ -74,7 +73,7 @@ The project uses the following technologies:
 
 #### File Upload
  * Users can upload code files for analysis.
-    * Supported file types: ``.js``, ``.ts``, ``.cs``, etc.
+    * Supported file types: ``.js``, ``.ts``, ``.jsx``, ``.tsx``, ``.cs``, etc.
      
 #### Code Analysis
  * The uploaded file undergoes analysis based on the language.
@@ -91,6 +90,100 @@ The project uses the following technologies:
 
 
 ### API
+
+#### Analyze Code
+**Endpoint:** `POST /api/analysis`
+- **Description:** Analyzes a given code snippet or file and returns an analysis report.
+- **Request Body:**
+  ```json
+  {
+    "SourceType": "file" | "content",
+    "FileId": "GUID (optional if SourceType is 'file')",
+    "Content": "string (optional if SourceType is 'content')"
+  }
+  ```
+- **Responses:**
+  - `200 OK`: Returns an `AnalysisReport`.
+  - `400 Bad Request`: If no code is provided.
+  - `500 Internal Server Error`: If analysis fails.
+
+#### Get Analysis Report
+**Endpoint:** `GET /api/analysis/{id}`
+- **Description:** Retrieves a previously generated analysis report by ID.
+- **Responses:**
+  - `200 OK`: Returns an `AnalysisReport`.
+  - `404 Not Found`: If report does not exist.
+
+#### Download Report
+**Endpoint:** `GET /api/analysis/download/{id}`
+- **Description:** Downloads the analysis report as a PDF.
+- **Responses:**
+  - `200 OK`: Returns the PDF file.
+  - `404 Not Found`: If the report or PDF does not exist.
+
+### Code Snippet API
+
+#### Create Code Snippet
+**Endpoint:** `POST /api/codesnippets`
+- **Description:** Creates a new code snippet.
+- **Request Body:**
+  ```json
+  {
+    "Content": "string"
+  }
+  ```
+- **Responses:**
+  - `201 Created`: Returns the created `CodeSnippet`.
+  - `400 Bad Request`: If input is invalid.
+
+#### Get Code Snippet
+**Endpoint:** `GET /api/codesnippets/{id}`
+- **Description:** Retrieves a code snippet by ID.
+- **Responses:**
+  - `200 OK`: Returns a `CodeSnippet`.
+  - `404 Not Found`: If snippet does not exist.
+
+### File API
+
+#### Upload File
+**Endpoint:** `POST /api/files`
+- **Description:** Uploads a source code file for analysis.
+- **Request:** Form-data with a file.
+- **Responses:**
+  - `200 OK`: Returns file metadata.
+  - `400 Bad Request`: If file is missing or has an invalid type.
+  - `500 Internal Server Error`: If upload fails.
+
+#### Get File by ID
+**Endpoint:** `GET /api/files/{id}`
+- **Description:** Retrieves a file by ID.
+- **Responses:**
+  - `200 OK`: Returns file metadata and content.
+  - `404 Not Found`: If file does not exist.
+
+### User API
+
+#### Create User
+**Endpoint:** `POST /users`
+- **Description:** Creates a new user.
+- **Request Body:**
+  ```json
+  {
+    "UserName": "string",
+    "Email": "string"
+  }
+  ```
+- **Responses:**
+  - `201 Created`: Returns the created user.
+  - `400 Bad Request`: If input is invalid.
+
+#### Get User by ID
+**Endpoint:** `GET /users/{id}`
+- **Description:** Retrieves user details by ID.
+- **Responses:**
+  - `200 OK`: Returns the user.
+  - `404 Not Found`: If user does not exist.
+
 
 
 ### Authentication
