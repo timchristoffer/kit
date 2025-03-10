@@ -221,4 +221,31 @@ Deployment occurs via Github Actions:
     ```
 
 
-### Improvements & Features
+### Improvements
+* Enhance Analysis Tools & Reporting
+
+**Expand analysis capabilities for more detailed insights.
+
+Improve report generation with additional metrics.
+
+Expand Language & File Support
+
+Add support for additional programming languages.
+
+Increase the range of file types that can be analyzed.
+
+OAuth Authentication
+
+Implement GitHub login for personalized access.
+
+GitHub Integration
+
+Allow users to select code files directly from their GitHub repositories.
+
+Real-Time Code Review
+
+Introduce live code analysis with SignalR for instant feedback.
+
+Production Deployment
+
+Deploy backend using Supabase and frontend via Vercel.
