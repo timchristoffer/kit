@@ -26,11 +26,9 @@ A simple app to keep your code tidy by reviewing it and generating reports.
 This project is a web application built using **Next.js** for the frontend and a **C# .NET backend** for code analysis. The application allows users to paste or write code in a text area and receive a detailed analysis report. The backend analyzes the code based on multiple aspects, including readability, security, and performance, and returns the results to the frontend.
 
 ## **Usage**
-1. The user pastes their code into the text field and clicks "Analyze."
+1. The user pastes their code into the text field or uploads a code file and clicks "Analyze."
 2. The backend process starts and analyzes the code.
 3. The results are displayed as a report in the frontend, providing the user with insights into what can be improved in their code.
-
-This project showcases how to combine frontend and backend technologies to build a functional and user-friendly application that solves a real-world problem.
 
 ---
 
@@ -38,7 +36,7 @@ This project showcases how to combine frontend and backend technologies to build
 
 
 ### Prerequisites
-Clone this repository:
+Clone this repository(Make sure you are cloning `demo` for local use):
 ```bash
 git clone https://github.com/timchristoffer/kit
 ```
