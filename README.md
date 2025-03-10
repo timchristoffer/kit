@@ -221,7 +221,7 @@ Deployment occurs via Github Actions:
     ```
 
 
-### Improvements
+### Improvements (Planned)
 * Enhance Analysis Tools & Reporting
   * Expand analysis capabilities for more detailed insights.
   * Improve report generation with additional metrics.
