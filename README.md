@@ -81,7 +81,7 @@ The project uses the following technologies:
 
 #### File Upload
  * Users can upload code files for analysis.
-    * Supported file types: ``.js``, ``.ts``, ``.jsx``, ``.tsx``, ``.cs``, etc.
+    * Supported file types: ``.js``, ``.ts``, ``.jsx``, ``.tsx``, ``.cs``
      
 #### Code Analysis
  * The uploaded file undergoes analysis based on the language.
