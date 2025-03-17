@@ -87,7 +87,7 @@ namespace KitBackend.Endpoints
                         Id = file.Id,
                         FileName = file.FileName,
                         FileSize = file.FileSize,
-                        UploadDate = file.UploadDate,
+                        UploadDate = file.UploadDate,   
                         Uploader = file.Uploader,
                         Content = Convert.ToBase64String(file.FileContent) // Return file content as base64 string
                     });
