@@ -10,20 +10,20 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     // Data Models
-    public DbSet<UploadedFile> UploadedFile { get; set; } = null!;
-    public DbSet<CodeSnippet> CodeSnippet { get; set; } = null!;
-    public DbSet<ErrorLog> ErrorLog { get; set; } = null!;
-    public DbSet<Project> Project { get; set; } = null!;
-    public DbSet<User> User { get; set; } = null!;
+    public virtual DbSet<UploadedFile> UploadedFile { get; set; } = null!;
+    public virtual DbSet<CodeSnippet> CodeSnippet { get; set; } = null!;
+    public virtual DbSet<ErrorLog> ErrorLog { get; set; } = null!;
+    public virtual DbSet<Project> Project { get; set; } = null!;
+    public virtual DbSet<User> User { get; set; } = null!;
 
     // Request Models
-    public DbSet<AnalysisRequest> AnalysisRequest { get; set; } = null!;
+    public virtual DbSet<AnalysisRequest> AnalysisRequest { get; set; } = null!;
 
     // Response Models
-    public DbSet<AnalysisReport> AnalysisReport { get; set; } = null!;
-    public DbSet<AnalysisStatus> AnalysisStatus { get; set; } = null!;
-    public DbSet<CodeAnalysisResult> CodeAnalysisResult { get; set; } = null!;
-    public DbSet<Metric> Metric { get; set; } = null!;
+    public virtual DbSet<AnalysisReport> AnalysisReport { get; set; } = null!;
+    public virtual DbSet<AnalysisStatus> AnalysisStatus { get; set; } = null!;
+    public virtual DbSet<CodeAnalysisResult> CodeAnalysisResult { get; set; } = null!;
+    public virtual DbSet<Metric> Metric { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

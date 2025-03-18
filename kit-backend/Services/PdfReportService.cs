@@ -8,7 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace KitBackend.Services
 {
-    public class PdfReportService
+    public interface IPdfReportService
+    {
+        string GeneratePdfReport(AnalysisReport report);
+    }
+
+    public class PdfReportService : IPdfReportService
     {
         private readonly ILogger<PdfReportService> _logger;
 
@@ -17,7 +22,7 @@ namespace KitBackend.Services
             _logger = logger;
         }
 
-        public string GeneratePdfReport(AnalysisReport report)
+        public virtual string GeneratePdfReport(AnalysisReport report)
         {
             var pdfPath = Path.Combine("Reports", $"{report.ReportId}.pdf");
             Directory.CreateDirectory("Reports");
@@ -38,15 +43,23 @@ namespace KitBackend.Services
                     void DrawString(string text, XFont font, XBrush brush, double x, double y)
                     {
                         var size = gfx.MeasureString(text, font);
-                        var rect = new XRect(x, y, page.Width - 2 * margin, page.Height - 2 * margin);
+                        var rect = new XRect(
+                            x,
+                            y,
+                            page.Width.Point - 2 * margin,
+                            page.Height.Point - 2 * margin);
                         var format = XStringFormats.TopLeft;
 
-                        if (y + size.Height > page.Height - margin)
+                        if (y + size.Height > page.Height.Point - margin)
                         {
                             page = document.AddPage();
                             gfx = XGraphics.FromPdfPage(page);
                             yOffset = margin;
-                            rect = new XRect(x, yOffset, page.Width - 2 * margin, page.Height - 2 * margin);
+                            rect = new XRect(
+                                x,
+                                yOffset,
+                                page.Width.Point - 2 * margin,
+                                page.Height.Point - 2 * margin);
                         }
 
                         gfx.DrawString(text, font, brush, rect, format);
@@ -63,7 +76,7 @@ namespace KitBackend.Services
                             var testLine = string.IsNullOrEmpty(line) ? word : line + " " + word;
                             var size = gfx.MeasureString(testLine, font);
 
-                            if (size.Width > page.Width - 2 * margin)
+                            if (size.Width > page.Width.Point - 2 * margin)
                             {
                                 DrawString(line, font, brush, x, yOffset);
                                 line = word;
@@ -83,7 +96,11 @@ namespace KitBackend.Services
                     DrawWrappedString("Analysis Report", title, XBrushes.Black, margin, yOffset);
                     DrawWrappedString($"Report ID: {report.ReportId}", font, XBrushes.Black, margin, yOffset);
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString("Scores", boldFont, XBrushes.Black, margin, yOffset);
@@ -134,14 +151,18 @@ namespace KitBackend.Services
                     var chartFrame = new ChartFrame
                     {
                         Location = new XPoint(margin, yOffset),
-                        Size = new XSize(page.Width - 2 * margin, 300),
+                        Size = new XSize(page.Width.Point - 2 * margin, 300),
                     };
                     chartFrame.Add(chart);
                     chartFrame.Draw(gfx);
 
                     yOffset += 310;
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString("Issues", boldFont, XBrushes.Black, margin, yOffset);
@@ -150,7 +171,11 @@ namespace KitBackend.Services
                         DrawWrappedString(issue, font, XBrushes.Black, margin, yOffset);
                     }
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString("Security Issues", boldFont, XBrushes.Black, margin, yOffset);
@@ -159,7 +184,11 @@ namespace KitBackend.Services
                         DrawWrappedString(issue, font, XBrushes.Black, margin, yOffset);
                     }
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString("Performance Issues", boldFont, XBrushes.Black, margin, yOffset);
@@ -168,7 +197,11 @@ namespace KitBackend.Services
                         DrawWrappedString(issue, font, XBrushes.Black, margin, yOffset);
                     }
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString("Readability Issues", boldFont, XBrushes.Black, margin, yOffset);
@@ -177,7 +210,11 @@ namespace KitBackend.Services
                         DrawWrappedString(issue, font, XBrushes.Black, margin, yOffset);
                     }
 
-                    gfx.DrawLine(XPens.Black, margin, yOffset, page.Width - margin, yOffset);
+                    gfx.DrawLine(XPens.Black,
+                        margin,
+                        yOffset,
+                        page.Width.Point - margin,
+                        yOffset);
                     yOffset += 10;
 
                     DrawWrappedString($"Best Practices Feedback: {report.BestPracticesFeedback}", boldFont, XBrushes.Black, margin, yOffset);

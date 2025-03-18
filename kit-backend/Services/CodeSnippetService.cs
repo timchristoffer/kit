@@ -13,7 +13,7 @@ namespace KitBackend.Services
             _context = context;
         }
 
-        public async Task<CodeSnippet> CreateCodeSnippetAsync(CodeSnippet snippet)
+        public virtual async Task<CodeSnippet> CreateCodeSnippetAsync(CodeSnippet snippet)
         {
             snippet.SnippetId = Guid.NewGuid();
             _context.CodeSnippet.Add(snippet);
@@ -21,7 +21,7 @@ namespace KitBackend.Services
             return snippet;
         }
 
-        public async Task<CodeSnippet> GetCodeSnippetByIdAsync(Guid id)
+        public virtual async Task<CodeSnippet> GetCodeSnippetByIdAsync(Guid id)
         {
             return await _context.CodeSnippet.FindAsync(id);
         }

@@ -9,7 +9,7 @@ namespace KitBackend.Services
 {
     public interface IFileService
     {
-        Task<UploadedFile> UploadFileAsync(IFormFile file, string uploader);
+        Task<UploadedFile?> UploadFileAsync(IFormFile file, string uploader);
         Task<UploadedFile> GetFileById(int id);
     }
 }

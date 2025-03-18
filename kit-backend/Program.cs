@@ -65,7 +65,7 @@ app.UseAuthorization();
 
 app.UseRouting();
 
-// Kommentera ut denna rad om du vill inaktivera antiforgery globalt
+// Inaktiverar antiforgery globalt
 // app.UseAntiforgery();
 
 app.MapFileEndpoints();

@@ -16,10 +16,10 @@ namespace KitBackend.Services
     {
         private readonly ApplicationDbContext _context;
         // private readonly MLModelService _mlModelService; // ML-koden utkommenterad
-        private readonly PdfReportService _pdfReportService;
+        private readonly IPdfReportService _pdfReportService;
         private readonly ILogger<AnalysisService> _logger;
 
-        public AnalysisService(ApplicationDbContext context, /*MLModelService mlModelService,*/ PdfReportService pdfReportService, ILogger<AnalysisService> logger)
+        public AnalysisService(ApplicationDbContext context, /*MLModelService mlModelService,*/ IPdfReportService pdfReportService, ILogger<AnalysisService> logger)
         {
             _context = context;
             // _mlModelService = mlModelService; // ML-koden utkommenterad
@@ -127,7 +127,8 @@ namespace KitBackend.Services
 
         public async Task<AnalysisReport> GetReportByIdAsync(Guid id)
         {
-            return await _context.AnalysisReport.FindAsync(id);
+            var report = await _context.AnalysisReport.FindAsync(id);
+            return report ?? throw new KeyNotFoundException($"Analysis report with ID {id} not found");
         }
 
         public async Task SaveAnalysisStatusAsync(AnalysisStatus status)

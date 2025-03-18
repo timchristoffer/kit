@@ -8,8 +8,8 @@
             if (code.Split('\n').Length > 500) score -= 20;
             if (code.Contains("switch") && code.Contains("case")) score -= 10;
             if (code.Length > 1000) score -= 15;
-            if (code.Contains("todo")) score -= 5;
-            if (code.Contains("fixme")) score -= 5;
+            if (code.Contains("TODO")) score -= 5;
+            if (code.Contains("FIXME")) score -= 5;
             if (code.Split('\n').Any(line => line.Length > 120)) score -= 10;
             if (code.Count(c => c == '{') > 20) score -= 10;
             if (!code.Contains("//")) score -= 10;
@@ -57,7 +57,7 @@
                 }
             }
 
-            if (code.Contains("todo"))
+            if (code.Contains("TODO"))
             {
                 issues.Add("Code readability: TODO comments found, ensure they are addressed before finalizing.");
             }
