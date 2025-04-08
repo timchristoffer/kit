@@ -13,10 +13,9 @@ A simple app to keep your code tidy by reviewing it and generating reports.
 3. [Technologies](#technologies)
 4. [Core Features](#core-features)
 5. [API](#api)
-6. [Authentication](#authentication)
-7. [Development Workflow](#development-workflow)
-8. [Testing](#testing)
-9. [Improvements & Features](#improvements--features)
+6. [Development Workflow](#development-workflow)
+7. [Testing](#testing)
+8. [Improvements & Features](#improvements--features)
 
 
 ---
@@ -27,11 +26,9 @@ A simple app to keep your code tidy by reviewing it and generating reports.
 This project is a web application built using **Next.js** for the frontend and a **C# .NET backend** for code analysis. The application allows users to paste or write code in a text area and receive a detailed analysis report. The backend analyzes the code based on multiple aspects, including readability, security, and performance, and returns the results to the frontend.
 
 ## **Usage**
-1. The user pastes their code into the text field and clicks "Analyze."
+1. The user pastes their code into the text field or uploads a code file and clicks "Analyze."
 2. The backend process starts and analyzes the code.
 3. The results are displayed as a report in the frontend, providing the user with insights into what can be improved in their code.
-
-This project showcases how to combine frontend and backend technologies to build a functional and user-friendly application that solves a real-world problem.
 
 ---
 
@@ -39,7 +36,7 @@ This project showcases how to combine frontend and backend technologies to build
 
 
 ### Prerequisites
-Clone this repository:
+Clone this repository(Make sure you are cloning `demo` for local use):
 ```bash
 git clone https://github.com/timchristoffer/kit
 ```
@@ -49,6 +46,17 @@ npm install # For frontend (Next.js)
 ```
 ```bash
 dotnet restore # For backend (C#)
+```
+
+Setting up local database:
+```bash
+Make sure to update `DefaultConnection` in `appsettings.json`
+```
+```bash
+dotnet ef migrations add InitialCreate
+```
+```bash
+dotnet ef database update
 ```
 
 
@@ -64,7 +72,6 @@ The project uses the following technologies:
  * **Frontend:** Next.js, React
  * **Backend:** C#, .NET Core WebAPI, .NET 9
  * **Database:** PostgreSQL (pgAdmin4)
- * **Authentication:** OAuth 2.0 (GitHub, Google, Microsoft)
  * **API Specification:** Swagger/OpenAPI
  * **Testing:** Jest (frontend), xUnit (backend)
 
@@ -74,7 +81,7 @@ The project uses the following technologies:
 
 #### File Upload
  * Users can upload code files for analysis.
-    * Supported file types: ``.js``, ``.ts``, ``.cs``, etc.
+    * Supported file types: ``.js``, ``.ts``, ``.jsx``, ``.tsx``, ``.cs``
      
 #### Code Analysis
  * The uploaded file undergoes analysis based on the language.
@@ -92,9 +99,100 @@ The project uses the following technologies:
 
 ### API
 
+#### Analysis API
 
-### Authentication
+##### Analyze Code
+**Endpoint:** `POST /api/analysis`
+- **Description:** Analyzes a given code snippet or file and returns an analysis report.
+- **Request Body:**
+  ```json
+  {
+    "SourceType": "file" | "content",
+    "FileId": "GUID (optional if SourceType is 'file')",
+    "Content": "string (optional if SourceType is 'content')"
+  }
+  ```
+- **Responses:**
+  - `200 OK`: Returns an `AnalysisReport`.
+  - `400 Bad Request`: If no code is provided.
+  - `500 Internal Server Error`: If analysis fails.
 
+#### Get Analysis Report
+**Endpoint:** `GET /api/analysis/{id}`
+- **Description:** Retrieves a previously generated analysis report by ID.
+- **Responses:**
+  - `200 OK`: Returns an `AnalysisReport`.
+  - `404 Not Found`: If report does not exist.
+
+#### Download Report
+**Endpoint:** `GET /api/analysis/download/{id}`
+- **Description:** Downloads the analysis report as a PDF.
+- **Responses:**
+  - `200 OK`: Returns the PDF file.
+  - `404 Not Found`: If the report or PDF does not exist.
+
+#### Code Snippet API
+
+##### Create Code Snippet
+**Endpoint:** `POST /api/codesnippets`
+- **Description:** Creates a new code snippet.
+- **Request Body:**
+  ```json
+  {
+    "Content": "string"
+  }
+  ```
+- **Responses:**
+  - `201 Created`: Returns the created `CodeSnippet`.
+  - `400 Bad Request`: If input is invalid.
+
+#### Get Code Snippet
+**Endpoint:** `GET /api/codesnippets/{id}`
+- **Description:** Retrieves a code snippet by ID.
+- **Responses:**
+  - `200 OK`: Returns a `CodeSnippet`.
+  - `404 Not Found`: If snippet does not exist.
+
+#### File API
+
+##### Upload File
+**Endpoint:** `POST /api/files`
+- **Description:** Uploads a source code file for analysis.
+- **Request:** Form-data with a file.
+- **Responses:**
+  - `200 OK`: Returns file metadata.
+  - `400 Bad Request`: If file is missing or has an invalid type.
+  - `500 Internal Server Error`: If upload fails.
+
+#### Get File by ID
+**Endpoint:** `GET /api/files/{id}`
+- **Description:** Retrieves a file by ID.
+- **Responses:**
+  - `200 OK`: Returns file metadata and content.
+  - `404 Not Found`: If file does not exist.
+
+#### User API
+
+##### Create User
+**Endpoint:** `POST /users`
+- **Description:** Creates a new user.
+- **Request Body:**
+  ```json
+  {
+    "UserName": "string",
+    "Email": "string"
+  }
+  ```
+- **Responses:**
+  - `201 Created`: Returns the created user.
+  - `400 Bad Request`: If input is invalid.
+
+#### Get User by ID
+**Endpoint:** `GET /users/{id}`
+- **Description:** Retrieves user details by ID.
+- **Responses:**
+  - `200 OK`: Returns the user.
+  - `404 Not Found`: If user does not exist.
 
 ### Development Workflow
 #### Local Development Flow
@@ -103,8 +201,9 @@ The project uses the following technologies:
    
 #### Deployment
 Deployment occurs via Github Actions:
- * Backend is deployed on Azure.
- * Frontend is deployed via Vercel (Next.js)
+ * Frontend is deployed via Render.
+ * Backend is deployed on Render.
+ * Database is deployed on Render.
 
 
 ### Testing
@@ -122,4 +221,20 @@ Deployment occurs via Github Actions:
     ```
 
 
-### Improvements & Features
+### Improvements (Planned)
+* Enhance Analysis Tools & Reporting
+  * Expand analysis capabilities for more detailed insights.
+  * Improve report generation with additional metrics.
+
+* Expand Language & File Support
+  * Add support for additional programming languages.
+  * Increase the range of file types that can be analyzed.
+
+* OAuth Authentication
+  * Implement GitHub login for personalized access.
+
+* GitHub Integration
+  * Allow users to select code files directly from their GitHub repositories.
+
+* Real-Time Code Review
+  * Introduce live code analysis with SignalR for instant feedback.
